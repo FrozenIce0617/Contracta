@@ -1,10 +1,12 @@
 import { createStackNavigator } from 'react-navigation';
 
 import ContractDetailScreen from '../../screens/mainStack/ContractDetail';
+import ContractExpandScreen from '../../screens/mainStack/ContractExpand';
 
-const AuthNavigator = createStackNavigator(
+const MainNavigator = createStackNavigator(
   {
     ContractDetail: { screen: ContractDetailScreen },
+    ContractExpand: { screen: ContractExpandScreen },
   },
   {
     initialRouteName: 'ContractDetail',
@@ -12,4 +14,4 @@ const AuthNavigator = createStackNavigator(
   },
 );
 
-export default AuthNavigator;
+export default MainNavigator;
