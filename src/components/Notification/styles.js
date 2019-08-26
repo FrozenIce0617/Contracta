@@ -4,8 +4,10 @@ import { scalingUtils, colors } from '../../styles';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    marginLeft: scalingUtils.scale(25),
-    marginRight: scalingUtils.scale(25),
+    paddingLeft: scalingUtils.scale(25),
+    paddingRight: scalingUtils.scale(25),
+    borderBottomColor: colors.navy,
+    borderBottomWidth: scalingUtils.verticalScale(0.5),
   },
   row: {
     flexDirection: 'row',
