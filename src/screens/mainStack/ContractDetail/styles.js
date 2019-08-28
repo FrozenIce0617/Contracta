@@ -5,6 +5,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

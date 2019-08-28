@@ -1,5 +1,12 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import _ from 'lodash';
 import { Dropdown } from 'react-native-material-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -17,9 +24,9 @@ class ContractExpand extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const intentOptions = navigation.getParam('intentOptions', {});
-    const priorityOptions = navigation.getParam('priorityOptions', {});
-    const contractText = navigation.getParam('contractText', '');
+    const info = navigation.getParam('item', {});
+    const intentOptions = navigation.getParam('intentOptions', []);
+    const priorityOptions = navigation.getParam('priorityOptions', []);
 
     return (
       <SafeAreaView>
@@ -28,8 +35,11 @@ class ContractExpand extends React.Component {
             <FontAwesome name="angle-left" size={30} color="#fff" />
           </TouchableOpacity>
           <View style={styles.contractName}>
-            <Text style={styles.contractText}>12Eastcote</Text>
+            <Text style={styles.contractText}>{info.title}</Text>
           </View>
+          {/* <View style={styles.stateContainer}>
+            <Text style={styles.state}>{_.capitalize(info.state)}</Text>
+          </View> */}
         </View>
         <View style={styles.container}>
           <View>
@@ -51,67 +61,74 @@ class ContractExpand extends React.Component {
               </View>
             </View>
             <View>
+              <Text>{info.rawtext}</Text>
+            </View>
+            {/* <View>
               <Text style={styles.textCategory}>Content:</Text>
             </View>
             <View style={{ marginBottom: 5 }}>
-              <Text>{contractText}</Text>
-            </View>
+              <Text>{info.description}</Text>
+            </View> */}
           </View>
           <View>
             <View style={styles.borderTop}>
-              <Text>Alerts:</Text>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed to contract</Text>
-                </View>
-              </View>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed data: 1st day of August</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.borderTop}>
-              <Text>Actions:</Text>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed to contract</Text>
-                </View>
-              </View>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed data: 1st day of August</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.borderTop}>
               <Text>Comments:</Text>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed to contract</Text>
+              {info.comments.items.map(comment => (
+                <View style={styles.row}>
+                  <FontAwesome
+                    name="angle-right"
+                    size={20}
+                    color={colors.navy}
+                  />
+                  <View style={[styles.center, styles.notification]}>
+                    <Text>{comment.content}</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Signed data: 1st day of August</Text>
-                </View>
-              </View>
+              ))}
             </View>
-            <View style={styles.entities}>
-              <Text>Entities:</Text>
-              <View style={styles.row}>
-                <FontAwesome name="angle-right" size={20} color={colors.navy} />
-                <View style={[styles.center, styles.notification]}>
-                  <Text>Max Mustermann and Joe Relaxmann</Text>
+            <View style={styles.borderTop}>
+              <Text>Alerts:</Text>
+              {info.alert.items.map(al => (
+                <View style={styles.row}>
+                  <FontAwesome
+                    name="angle-right"
+                    size={20}
+                    color={colors.navy}
+                  />
+                  <View style={[styles.center, styles.notification]}>
+                    <Text>{al.content}</Text>
+                  </View>
                 </View>
-              </View>
+              ))}
             </View>
+            <View style={styles.borderBoth}>
+              <Text>Actions:</Text>
+              {info.action.items.map(action => (
+                <View style={styles.row}>
+                  <FontAwesome
+                    name="angle-right"
+                    size={20}
+                    color={colors.navy}
+                  />
+                  <View style={[styles.center, styles.notification]}>
+                    <Text>{action.content}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+            {/* <View style={styles.entities}>
+                  <Text>Entities:</Text>
+                  <View style={styles.row}>
+                    <FontAwesome
+                      name="angle-right"
+                      size={20}
+                      color={colors.navy}
+                    />
+                    <View style={[styles.center, styles.notification]}>
+                      <Text>Max Mustermann and Joe Relaxmann</Text>
+                    </View>
+                  </View>
+                </View> */}
           </View>
         </View>
       </SafeAreaView>

@@ -37,9 +37,21 @@ const styles = StyleSheet.create({
     marginLeft: scalingUtils.scale(20),
   },
   contractText: {
-    fontSize: scalingUtils.verticalScale(25),
+    fontSize: scalingUtils.verticalScale(20),
     color: colors.white,
     fontWeight: 'bold',
+  },
+  stateContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: scalingUtils.scale(15),
+    padding: scalingUtils.scale(5),
+    backgroundColor: colors.white,
+    borderRadius: scalingUtils.scale(5),
+  },
+  state: {
+    color: colors.navy,
   },
   category: {
     display: 'flex',
@@ -70,6 +82,15 @@ const styles = StyleSheet.create({
     borderColor: colors.navy,
     marginTop: scalingUtils.verticalScale(5),
     paddingTop: scalingUtils.verticalScale(5),
+  },
+  borderBoth: {
+    borderTopWidth: scalingUtils.verticalScale(0.5),
+    borderBottomWidth: scalingUtils.verticalScale(0.5),
+    borderColor: colors.navy,
+    marginTop: scalingUtils.verticalScale(5),
+    marginBottom: scalingUtils.verticalScale(5),
+    paddingTop: scalingUtils.verticalScale(5),
+    paddingBottom: scalingUtils.verticalScale(5),
   },
   borderBottom: {
     borderBottomWidth: scalingUtils.verticalScale(0.5),

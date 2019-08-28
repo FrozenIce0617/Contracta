@@ -1,0 +1,509 @@
+type Contract {
+  id: ID!
+  name: String!
+  description: String
+  rawtext: String
+  pages: Int
+  url: AWSURL
+  date: AWSDate
+  arn: String
+  Stats: Stat
+  state: String
+  bodytext(filter: ModelBodyFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBodyConnection
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+}
+
+type Stat {
+  alerts: Int
+  actions: Int
+  version: Int
+}
+
+scalar AWSURL
+
+scalar AWSDate
+
+type Body {
+  id: ID!
+  title: String!
+  seqnr: Int
+  rawtext: String
+  Stats: Stat
+  alert(filter: ModelAlertFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAlertConnection
+  action(filter: ModelActionFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelActionConnection
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  contract: Contract
+  intents(filter: ModelIntentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelIntentConnection
+  entities(filter: ModelEntityFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEntityConnection
+  keyphrases(filter: ModelKeyphraseFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelKeyphraseConnection
+}
+
+type Entity {
+  id: ID!
+  score: Float!
+  type: String!
+  text: String!
+  beginOffset: Int!
+  endOffset: Int!
+  humanorai: Boolean!
+  body: Body
+}
+
+type Keyphrase {
+  id: ID!
+  score: Float!
+  text: String!
+  beginOffset: Int!
+  endOffset: Int!
+  humanorai: Boolean!
+  body: Body
+}
+
+type Intent {
+  id: ID!
+  score: Float!
+  text: String!
+  humanorai: Boolean!
+  body: Body
+}
+
+type Comment {
+  id: ID!
+  content: String
+  state: Int
+  contract: Contract
+  body: Body
+}
+
+type Alert {
+  id: ID!
+  content: String
+  state: Int
+  body: Body
+}
+
+type Action {
+  id: ID!
+  content: String
+  state: Int
+  body: Body
+}
+
+input StatInput {
+  alerts: Int
+  actions: Int
+  version: Int
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelContractConnection {
+  items: [Contract]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelContractFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  description: ModelStringFilterInput
+  rawtext: ModelStringFilterInput
+  pages: ModelIntFilterInput
+  url: ModelStringFilterInput
+  date: ModelStringFilterInput
+  arn: ModelStringFilterInput
+  state: ModelStringFilterInput
+  and: [ModelContractFilterInput]
+  or: [ModelContractFilterInput]
+  not: ModelContractFilterInput
+}
+
+type Query {
+  getContract(id: ID!): Contract
+  listContracts(filter: ModelContractFilterInput, limit: Int, nextToken: String): ModelContractConnection
+  getBody(id: ID!): Body
+  listBodys(filter: ModelBodyFilterInput, limit: Int, nextToken: String): ModelBodyConnection
+  getEntity(id: ID!): Entity
+  listEntitys(filter: ModelEntityFilterInput, limit: Int, nextToken: String): ModelEntityConnection
+  getKeyphrase(id: ID!): Keyphrase
+  listKeyphrases(filter: ModelKeyphraseFilterInput, limit: Int, nextToken: String): ModelKeyphraseConnection
+  getIntent(id: ID!): Intent
+  listIntents(filter: ModelIntentFilterInput, limit: Int, nextToken: String): ModelIntentConnection
+  getComment(id: ID!): Comment
+  listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection
+  getAlert(id: ID!): Alert
+  listAlerts(filter: ModelAlertFilterInput, limit: Int, nextToken: String): ModelAlertConnection
+  getAction(id: ID!): Action
+  listActions(filter: ModelActionFilterInput, limit: Int, nextToken: String): ModelActionConnection
+}
+
+input CreateContractInput {
+  id: ID
+  name: String!
+  description: String
+  rawtext: String
+  pages: Int
+  url: AWSURL
+  date: AWSDate
+  arn: String
+  Stats: StatInput
+  state: String
+}
+
+input UpdateContractInput {
+  id: ID!
+  name: String
+  description: String
+  rawtext: String
+  pages: Int
+  url: AWSURL
+  date: AWSDate
+  arn: String
+  Stats: StatInput
+  state: String
+}
+
+input DeleteContractInput {
+  id: ID
+}
+
+type Mutation {
+  createContract(input: CreateContractInput!): Contract
+  updateContract(input: UpdateContractInput!): Contract
+  deleteContract(input: DeleteContractInput!): Contract
+  createBody(input: CreateBodyInput!): Body
+  updateBody(input: UpdateBodyInput!): Body
+  deleteBody(input: DeleteBodyInput!): Body
+  createEntity(input: CreateEntityInput!): Entity
+  updateEntity(input: UpdateEntityInput!): Entity
+  deleteEntity(input: DeleteEntityInput!): Entity
+  createKeyphrase(input: CreateKeyphraseInput!): Keyphrase
+  updateKeyphrase(input: UpdateKeyphraseInput!): Keyphrase
+  deleteKeyphrase(input: DeleteKeyphraseInput!): Keyphrase
+  createIntent(input: CreateIntentInput!): Intent
+  updateIntent(input: UpdateIntentInput!): Intent
+  deleteIntent(input: DeleteIntentInput!): Intent
+  createComment(input: CreateCommentInput!): Comment
+  updateComment(input: UpdateCommentInput!): Comment
+  deleteComment(input: DeleteCommentInput!): Comment
+  createAlert(input: CreateAlertInput!): Alert
+  updateAlert(input: UpdateAlertInput!): Alert
+  deleteAlert(input: DeleteAlertInput!): Alert
+  createAction(input: CreateActionInput!): Action
+  updateAction(input: UpdateActionInput!): Action
+  deleteAction(input: DeleteActionInput!): Action
+}
+
+
+
+type ModelBodyConnection {
+  items: [Body]
+  nextToken: String
+}
+
+input ModelBodyFilterInput {
+  id: ModelIDFilterInput
+  title: ModelStringFilterInput
+  seqnr: ModelIntFilterInput
+  rawtext: ModelStringFilterInput
+  and: [ModelBodyFilterInput]
+  or: [ModelBodyFilterInput]
+  not: ModelBodyFilterInput
+}
+
+input CreateBodyInput {
+  id: ID
+  title: String!
+  seqnr: Int
+  rawtext: String
+  Stats: StatInput
+  bodyContractId: ID
+}
+
+input UpdateBodyInput {
+  id: ID!
+  title: String
+  seqnr: Int
+  rawtext: String
+  Stats: StatInput
+  bodyContractId: ID
+}
+
+input DeleteBodyInput {
+  id: ID
+}
+
+type ModelEntityConnection {
+  items: [Entity]
+  nextToken: String
+}
+
+input ModelEntityFilterInput {
+  id: ModelIDFilterInput
+  score: ModelFloatFilterInput
+  type: ModelStringFilterInput
+  text: ModelStringFilterInput
+  beginOffset: ModelIntFilterInput
+  endOffset: ModelIntFilterInput
+  humanorai: ModelBooleanFilterInput
+  and: [ModelEntityFilterInput]
+  or: [ModelEntityFilterInput]
+  not: ModelEntityFilterInput
+}
+
+input CreateEntityInput {
+  id: ID
+  score: Float!
+  type: String!
+  text: String!
+  beginOffset: Int!
+  endOffset: Int!
+  humanorai: Boolean!
+  entityBodyId: ID
+}
+
+input UpdateEntityInput {
+  id: ID!
+  score: Float
+  type: String
+  text: String
+  beginOffset: Int
+  endOffset: Int
+  humanorai: Boolean
+  entityBodyId: ID
+}
+
+input DeleteEntityInput {
+  id: ID
+}
+
+type ModelKeyphraseConnection {
+  items: [Keyphrase]
+  nextToken: String
+}
+
+input ModelKeyphraseFilterInput {
+  id: ModelIDFilterInput
+  score: ModelFloatFilterInput
+  text: ModelStringFilterInput
+  beginOffset: ModelIntFilterInput
+  endOffset: ModelIntFilterInput
+  humanorai: ModelBooleanFilterInput
+  and: [ModelKeyphraseFilterInput]
+  or: [ModelKeyphraseFilterInput]
+  not: ModelKeyphraseFilterInput
+}
+
+input CreateKeyphraseInput {
+  id: ID
+  score: Float!
+  text: String!
+  beginOffset: Int!
+  endOffset: Int!
+  humanorai: Boolean!
+  keyphraseBodyId: ID
+}
+
+input UpdateKeyphraseInput {
+  id: ID!
+  score: Float
+  text: String
+  beginOffset: Int
+  endOffset: Int
+  humanorai: Boolean
+  keyphraseBodyId: ID
+}
+
+input DeleteKeyphraseInput {
+  id: ID
+}
+
+type ModelIntentConnection {
+  items: [Intent]
+  nextToken: String
+}
+
+input ModelIntentFilterInput {
+  id: ModelIDFilterInput
+  score: ModelFloatFilterInput
+  text: ModelStringFilterInput
+  humanorai: ModelBooleanFilterInput
+  and: [ModelIntentFilterInput]
+  or: [ModelIntentFilterInput]
+  not: ModelIntentFilterInput
+}
+
+input CreateIntentInput {
+  id: ID
+  score: Float!
+  text: String!
+  humanorai: Boolean!
+  intentBodyId: ID
+}
+
+input UpdateIntentInput {
+  id: ID!
+  score: Float
+  text: String
+  humanorai: Boolean
+  intentBodyId: ID
+}
+
+input DeleteIntentInput {
+  id: ID
+}
+
+type ModelCommentConnection {
+  items: [Comment]
+  nextToken: String
+}
+
+input ModelCommentFilterInput {
+  id: ModelIDFilterInput
+  content: ModelStringFilterInput
+  state: ModelIntFilterInput
+  and: [ModelCommentFilterInput]
+  or: [ModelCommentFilterInput]
+  not: ModelCommentFilterInput
+}
+
+input CreateCommentInput {
+  id: ID
+  content: String
+  state: Int
+  commentContractId: ID
+  commentBodyId: ID
+}
+
+input UpdateCommentInput {
+  id: ID!
+  content: String
+  state: Int
+  commentContractId: ID
+  commentBodyId: ID
+}
+
+input DeleteCommentInput {
+  id: ID
+}
+
+type ModelAlertConnection {
+  items: [Alert]
+  nextToken: String
+}
+
+input ModelAlertFilterInput {
+  id: ModelIDFilterInput
+  content: ModelStringFilterInput
+  state: ModelIntFilterInput
+  and: [ModelAlertFilterInput]
+  or: [ModelAlertFilterInput]
+  not: ModelAlertFilterInput
+}
+
+input CreateAlertInput {
+  id: ID
+  content: String
+  state: Int
+  alertBodyId: ID
+}
+
+input UpdateAlertInput {
+  id: ID!
+  content: String
+  state: Int
+  alertBodyId: ID
+}
+
+input DeleteAlertInput {
+  id: ID
+}
+
+type ModelActionConnection {
+  items: [Action]
+  nextToken: String
+}
+
+input ModelActionFilterInput {
+  id: ModelIDFilterInput
+  content: ModelStringFilterInput
+  state: ModelIntFilterInput
+  and: [ModelActionFilterInput]
+  or: [ModelActionFilterInput]
+  not: ModelActionFilterInput
+}
+
+input CreateActionInput {
+  id: ID
+  content: String
+  state: Int
+  actionBodyId: ID
+}
+
+input UpdateActionInput {
+  id: ID!
+  content: String
+  state: Int
+  actionBodyId: ID
+}
+
+input DeleteActionInput {
+  id: ID
+}

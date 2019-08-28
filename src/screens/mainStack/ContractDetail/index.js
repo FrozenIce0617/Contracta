@@ -1,5 +1,8 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View, Text } from 'react-native';
+import { compose, graphql, withApollo } from 'react-apollo';
+
+import { GetContractDocument } from '../../../generated/graphql';
 
 import Header from '../../../components/Header';
 import Notification from '../../../components/Notification';
@@ -19,44 +22,74 @@ const priorityOptions = [
     label: 'LOW',
   },
 ];
-const contractText =
-  "THIS AGREEMENT made this 1st Day of August, 2019, by and between Mr. Max Mustermann, herein called 'Landlord', and Mr. Joe Relaxmann, herein called 'Tenant'. Landlord hereby agress to rent to Tenant the dwelling located at 12 Eastcote Road, HAS 15D Pinner, England under the following terms and conditions.";
 
 class ContractDetail extends React.Component {
-  onPressStretch = (intentOptions, priorityOptions, contractText) => {
+  onPressStretch = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractExpand', {
+      item,
       intentOptions,
       priorityOptions,
-      contractText,
     });
   };
 
   render() {
+    const { contract, loading } = this.props;
+
+    if (loading === true) {
+      return (
+        <SafeAreaView>
+          <View style={styles.center}>
+            <Text>Loading...</Text>
+          </View>
+        </SafeAreaView>
+      );
+    }
+
     return (
       <SafeAreaView style={styles.container}>
         <Header name="Ian" contract="12Eastcote" />
         <Notification />
         <ScrollView>
-          {[...Array(10)].map((item, index) => (
-            <ContractCard
-              key={index}
-              intentOptions={intentOptions}
-              priorityOptions={priorityOptions}
-              contractText={contractText}
-              onPressStretch={() =>
-                this.onPressStretch(
-                  intentOptions,
-                  priorityOptions,
-                  contractText,
-                )
-              }
-            />
-          ))}
+          {Object.keys(contract).length !== 0 ? (
+            contract.bodytext.items
+              .sort((a, b) => a.seqnr - b.seqnr)
+              .map((bt, i) => (
+                <ContractCard
+                  key={i}
+                  info={bt}
+                  intentOptions={intentOptions}
+                  priorityOptions={priorityOptions}
+                  onPressStretch={() => this.onPressStretch(bt)}
+                />
+              ))
+          ) : (
+            <SafeAreaView>
+              <View style={styles.center}>
+                <Text>Loading...</Text>
+              </View>
+            </SafeAreaView>
+          )}
         </ScrollView>
       </SafeAreaView>
     );
   }
 }
 
-export default ContractDetail;
+const ContractDetailWithData = compose(
+  graphql(GetContractDocument, {
+    options: () => ({
+      variables: {
+        id: '8af3387d-8a91-48b9-aec0-c722b2a826a9',
+      },
+    }),
+    props: props => {
+      console.log('DATA: ', props.data);
+      return {
+        contract: props.data.getContract ? props.data.getContract : [],
+      };
+    },
+  }),
+)(ContractDetail);
+
+export default ContractDetailWithData;

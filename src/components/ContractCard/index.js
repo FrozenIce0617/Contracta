@@ -11,12 +11,8 @@ import { colors } from '../../styles';
 
 class ContractCard extends React.Component {
   render() {
-    const {
-      intentOptions,
-      priorityOptions,
-      contractText,
-      onPressStretch,
-    } = this.props;
+    const { intentOptions, priorityOptions, info, onPressStretch } = this.props;
+    console.log('DATA: ', info);
 
     return (
       <View style={styles.container}>
@@ -48,26 +44,26 @@ class ContractCard extends React.Component {
           <Text style={styles.textCategory}>Content:</Text>
         </View>
         <View style={styles.borderBottom}>
-          <Text>{contractText}</Text>
+          <Text>{info.rawtext}</Text>
         </View>
         <View style={[styles.row, styles.spaceBetween]}>
           <View style={styles.section}>
             <View style={styles.icon}>
               <FontAwesome name="bell-o" size={30} color="#000" />
             </View>
-            <Text style={styles.count}>2</Text>
+            <Text style={styles.count}>{info.Stats.alerts}</Text>
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
               <Ionicons name="ios-flash" size={30} color="#000" />
             </View>
-            <Text style={styles.count}>2</Text>
+            <Text style={styles.count}>{info.Stats.actions}</Text>
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
               <FontAwesome name="comment-o" size={30} color="#000" />
             </View>
-            <Text style={styles.count}>2</Text>
+            <Text style={styles.count}>{info.Stats.version}</Text>
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
