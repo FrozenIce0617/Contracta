@@ -1,10 +1,10 @@
-import {createStackNavigator} from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import LoginScreen from '../../screens/authStack/Login';
 
 const AuthNavigator = createStackNavigator(
   {
-    Login: {screen: LoginScreen},
+    Login: { screen: LoginScreen },
   },
   {
     initialRouteName: 'Login',

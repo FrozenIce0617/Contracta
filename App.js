@@ -7,12 +7,21 @@
  */
 
 import React, { Component } from 'react';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import { withAuthenticator } from 'aws-amplify-react-native';
+import Amplify from 'aws-amplify';
 import AWSAppSyncClient from 'aws-appsync';
 import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 
 import NavigatorContainer from './src/navigation/NavigatorContainer';
 import awsConfig from './aws-exports';
+
+Amplify.configure({
+  ...awsConfig,
+  Analytics: {
+    disabled: true,
+  },
+});
 
 const client = new AWSAppSyncClient({
   url: awsConfig.aws_appsync_graphqlEndpoint,
@@ -24,7 +33,7 @@ const client = new AWSAppSyncClient({
 });
 
 type Props = {};
-export default class App extends Component<Props> {
+class App extends Component<Props> {
   render() {
     return (
       <ApolloProvider client={client}>
@@ -35,3 +44,6 @@ export default class App extends Component<Props> {
     );
   }
 }
+
+export default withAuthenticator(App, { includeGreetings: false });
+// export default App;

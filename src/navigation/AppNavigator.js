@@ -2,10 +2,12 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import AuthNavigator from './navigators/AuthNavigator';
 import MainNavigator from './navigators/MainNavigator';
+import DrawerNavigator from './navigators/DrawerNavigator';
 
 const AppNavigator = createSwitchNavigator(
   {
     auth: AuthNavigator,
+    drawer: DrawerNavigator,
     main: MainNavigator,
   },
   {
