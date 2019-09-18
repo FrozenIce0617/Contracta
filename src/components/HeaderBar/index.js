@@ -5,6 +5,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 
 class HeaderBar extends React.Component {
+  onPressBack = () => {
+    const { navigation } = this.props;
+    console.log('Navigation: ', navigation);
+    navigation.goBack();
+  };
+
   render() {
     const { heading } = this.props;
 
