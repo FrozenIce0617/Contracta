@@ -9,7 +9,7 @@ class EditProfile extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <HeaderBar heading="Edit Profile" />
+        <HeaderBar heading="Edit Profile" {...this.props} />
         <View style={styles.container}>
           <View>
             <ImageBackground

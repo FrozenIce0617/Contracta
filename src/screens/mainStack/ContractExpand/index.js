@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import _ from 'lodash';
 import { Dropdown } from 'react-native-material-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles';
 import { colors } from '../../../styles';
@@ -136,4 +128,4 @@ class ContractExpand extends React.Component {
   }
 }
 
-export default ContractExpand;
+export default withNavigation(ContractExpand);

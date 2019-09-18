@@ -1,15 +1,16 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import { Input, Button } from 'react-native-elements';
 
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
-class EditProfile extends React.Component {
+class Feedback extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <HeaderBar heading="Feedback" />
+        <HeaderBar heading="Feedback" {...this.props} />
         <View style={styles.container}>
           <View style={styles.infoContainer}>
             <Input placeholder="What did you like?" />
@@ -25,4 +26,4 @@ class EditProfile extends React.Component {
   }
 }
 
-export default EditProfile;
+export default withNavigation(Feedback);

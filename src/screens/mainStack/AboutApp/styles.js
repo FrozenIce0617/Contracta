@@ -34,23 +34,23 @@ const styles = StyleSheet.create({
   },
   avatar: {
     display: 'flex',
-    marginTop: scalingUtils.verticalScale(25),
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: scalingUtils.verticalScale(10),
   },
   avatarStyle: {
-    marginTop: -scalingUtils.verticalScale(25),
     borderWidth: scalingUtils.scale(2),
     borderColor: colors.white,
   },
   infoContainer: {
     marginTop: scalingUtils.verticalScale(10),
-    marginLeft: scalingUtils.scale(40),
-    marginRight: scalingUtils.scale(40),
+    marginLeft: scalingUtils.scale(20),
+    marginRight: scalingUtils.scale(20),
   },
-  infoRow: {
-    flex: 1,
+  btnRow: {
+    marginTop: scalingUtils.verticalScale(20),
     flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   infoHeading: {
     marginTop: scalingUtils.verticalScale(15),
@@ -61,6 +61,22 @@ const styles = StyleSheet.create({
   },
   infoContent: {
     fontSize: scalingUtils.scale(14),
+  },
+  update: {
+    backgroundColor: colors.navy,
+    paddingLeft: scalingUtils.scale(20),
+    paddingRight: scalingUtils.scale(20),
+    borderRadius: scalingUtils.scale(20),
+    width: scalingUtils.scale(120),
+    height: scalingUtils.scale(40),
+  },
+  cancel: {
+    backgroundColor: colors.gray,
+    paddingLeft: scalingUtils.scale(20),
+    paddingRight: scalingUtils.scale(20),
+    borderRadius: scalingUtils.scale(20),
+    width: scalingUtils.scale(120),
+    height: scalingUtils.scale(40),
   },
 });
 

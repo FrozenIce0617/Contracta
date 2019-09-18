@@ -13,10 +13,15 @@ import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
 class Profile extends React.Component {
+  onEditProfile = () => {
+    const { navigation } = this.props;
+    navigation.navigate('EditProfile');
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <HeaderBar heading="Profile" />
+        <HeaderBar heading="Profile" {...this.props} />
         <View style={styles.container}>
           <View>
             <ImageBackground
@@ -25,7 +30,10 @@ class Profile extends React.Component {
             >
               <View>
                 <View style={styles.btnContainer}>
-                  <TouchableOpacity style={styles.btnEdit}>
+                  <TouchableOpacity
+                    style={styles.btnEdit}
+                    onPress={this.onEditProfile}
+                  >
                     <FontAwesome name="pencil" size={20} color="#fff" />
                   </TouchableOpacity>
                 </View>

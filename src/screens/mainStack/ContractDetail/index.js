@@ -1,9 +1,16 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, View, Text } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { compose, graphql, withApollo } from 'react-apollo';
 
 import { GetContractDocument } from '../../../generated/graphql';
 
+import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 import Notification from '../../../components/Notification';
 import ContractCard from '../../../components/ContractCard';
@@ -48,6 +55,7 @@ class ContractDetail extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
+        <HeaderNavigatorBar {...this.props} />
         <Header name="Ian" contract="12Eastcote" />
         <Notification />
         <ScrollView>
@@ -80,7 +88,7 @@ const ContractDetailWithData = compose(
   graphql(GetContractDocument, {
     options: () => ({
       variables: {
-        id: '8af3387d-8a91-48b9-aec0-c722b2a826a9',
+        id: '3f04dea8-a4f2-45b2-93bd-e036a0ed1648',
       },
     }),
     props: props => {
