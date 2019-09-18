@@ -159,6 +159,18 @@ export const GetContractDocument = gql`
   }
 `;
 
+export const GetUser = gql`
+  query getUser($id: ID!) {
+    getContract(id: $id) {
+      id
+      firstname
+      lastname
+      contractaemail
+      isTermsAndPrivacyAgreed
+    }
+  }
+`;
+
 export const BodyListDocument = gql`
   query bodyList {
     listBodys {
