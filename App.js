@@ -23,18 +23,20 @@ Amplify.configure({
   },
 });
 
-const client = new AWSAppSyncClient({
-  url: awsConfig.aws_appsync_graphqlEndpoint,
-  region: awsConfig.aws_appsync_region,
-  auth: {
-    apiKey: awsConfig.aws_appsync_apiKey,
-    type: awsConfig.aws_appsync_authenticationType,
-  },
-});
-
 type Props = {};
 class App extends Component<Props> {
   render() {
+    const { authData } = this.props;
+    console.log(authData.signInUserSession.idToken.jwtToken);
+    const client = new AWSAppSyncClient({
+      url: awsConfig.aws_appsync_graphqlEndpoint,
+      region: awsConfig.aws_appsync_region,
+      auth: {
+        type: awsConfig.aws_appsync_authenticationType,
+        jwtToken: authData.signInUserSession.idToken.jwtToken,
+      },
+    });
+
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
