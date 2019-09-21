@@ -227,10 +227,28 @@ export const ContListDocument = gql`
         name
         description
         rawtext
-        Stats{
+        Stats {
           alerts
           actions
           version
+        }
+      }
+    }
+  }
+`;
+
+export const MetaContractList = gql`
+  query listMeta {
+    listMetaContracts {
+      items {
+        id
+        name
+        description
+        contracts {
+          items {
+            id
+            name
+          }
         }
       }
     }
