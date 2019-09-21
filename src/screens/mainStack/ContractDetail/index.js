@@ -8,12 +8,10 @@ import {
 } from 'react-native';
 import { compose, graphql, withApollo } from 'react-apollo';
 
-import { GetContractDocument } from '../../../generated/graphql';
-
-import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
-import Header from '../../../components/Header';
+import HeaderBar from '../../../components/HeaderBar';
 import Notification from '../../../components/Notification';
 import ContractCard from '../../../components/ContractCard';
+import { GetContractDocument } from '../../../generated/graphql';
 
 import styles from './styles';
 
@@ -41,7 +39,8 @@ class ContractDetail extends React.Component {
   };
 
   render() {
-    const { contract, loading } = this.props;
+    const { navigation, contract, loading } = this.props;
+    const item = navigation.getParam('item', { name: '', id: '' });
 
     if (loading === true) {
       return (
@@ -55,26 +54,24 @@ class ContractDetail extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderNavigatorBar {...this.props} />
-        <Header name="Ian" contract="12Eastcote" />
+        <HeaderBar heading={item.name} {...this.props} />
         <Notification />
         <ScrollView>
           {Object.keys(contract).length !== 0 ? (
-            contract.bodytext.items
-              .sort((a, b) => a.seqnr - b.seqnr)
-              .map((bt, i) => (
-                <ContractCard
-                  key={i}
-                  info={bt}
-                  intentOptions={intentOptions}
-                  priorityOptions={priorityOptions}
-                  onPressStretch={() => this.onPressStretch(bt)}
-                />
-              ))
+            // contract.bodytext.items
+            //   .sort((a, b) => a.seqnr - b.seqnr)
+            //   .map((bt, i) => (
+            <ContractCard
+              info={contract}
+              intentOptions={intentOptions}
+              priorityOptions={priorityOptions}
+              onPressStretch={() => this.onPressStretch(bt)}
+            />
           ) : (
+            // ))
             <SafeAreaView>
               <View style={styles.center}>
-                <Text>Loading...</Text>
+                <Text>No contract</Text>
               </View>
             </SafeAreaView>
           )}
@@ -86,15 +83,25 @@ class ContractDetail extends React.Component {
 
 const ContractDetailWithData = compose(
   graphql(GetContractDocument, {
-    options: () => ({
-      variables: {
-        id: '3f04dea8-a4f2-45b2-93bd-e036a0ed1648',
-      },
-    }),
+    options: props => {
+      const { navigation } = props;
+      const item = navigation.getParam('item', { name: '', id: '' });
+      const subContractId =
+        item.contracts &&
+        item.contracts.items.length > 0 &&
+        item.contracts.items[0].id;
+
+      return {
+        variables: {
+          id: subContractId,
+        },
+      };
+    },
     props: props => {
-      console.log('DATA: ', props.data);
+      console.log('DATA: ', props.data.getContract);
       return {
         contract: props.data.getContract ? props.data.getContract : [],
+        loading: props.data.loading,
       };
     },
   }),

@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
-  TouchableOpacity,
 } from 'react-native';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation';
 import { Auth } from 'aws-amplify';
@@ -57,7 +56,6 @@ class DrawerComponent extends React.Component {
             onPress={() => {
               Auth.signOut()
                 .then(res => {
-                  console.log(res);
                   this.setState({
                     loginStatus: 'signOut',
                   });

@@ -26,17 +26,17 @@ class MetaContract extends React.Component {
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
-      console.log('Auth: ', res);
       this.setState({ userId: res.id });
+      console.log('Auth Session: ', res);
     });
   }
 
-  onPressDetails = key => {
+  onPressDetails = item => {
     const { navigation } = this.props;
-    navigation.navigate('ContractDetail', {
-      key,
-    });
+    navigation.navigate('ContractDetail', { item });
   };
+
+  onPressUpload = () => {};
 
   render() {
     const { contract, loading } = this.props;
@@ -65,6 +65,7 @@ class MetaContract extends React.Component {
             title="Upload a new document"
             titleStyle={styles.btnFontSize}
             icon={<Icon name="upload" size={20} color="white" />}
+            onPress={this.onPressUpload}
           />
         </View>
         <ScrollView>
@@ -74,7 +75,7 @@ class MetaContract extends React.Component {
                 {contract.map(item => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => this.onPressDetails(item.id)}
+                    onPress={() => this.onPressDetails(item)}
                   >
                     <View style={styles.contractItem}>
                       <View style={[styles.preview, styles.center]}>
@@ -105,7 +106,6 @@ class MetaContract extends React.Component {
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
     props: props => {
-      console.log('Meta DATA: ', props.data);
       return {
         contract:
           props.data.listMetaContracts && props.data.listMetaContracts.items

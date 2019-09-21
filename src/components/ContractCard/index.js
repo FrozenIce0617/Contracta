@@ -11,7 +11,6 @@ import { colors } from '../../styles';
 class ContractCard extends React.Component {
   render() {
     const { intentOptions, priorityOptions, info, onPressStretch } = this.props;
-    console.log('DATA: ', info);
 
     return (
       <View style={styles.container}>
@@ -43,7 +42,7 @@ class ContractCard extends React.Component {
           <Text style={styles.textCategory}>Content:</Text>
         </View>
         <View style={styles.borderBottom}>
-          <Text>{info.rawtext}</Text>
+          <Text>{info.description}</Text>
         </View>
         <View style={[styles.row, styles.spaceBetween]}>
           <View style={styles.section}>

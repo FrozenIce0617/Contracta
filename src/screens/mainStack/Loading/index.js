@@ -12,7 +12,7 @@ class Loading extends React.Component {
     id: '',
   };
 
-  componentDidMount() {
+  componentWillMount() {
     Auth.currentUserInfo()
       .then(res => {
         this.setState(id, res.username);
@@ -29,6 +29,7 @@ class Loading extends React.Component {
         <View style={styles.container}>
           <Query query={GetUser} variables={{ id }}>
             {({ loading, error, data }) => {
+              console.log('HERE: ', data);
               if (loading || error)
                 return <ActivityIndicator size="large" color="#808080" />;
 
