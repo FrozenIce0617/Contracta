@@ -20,6 +20,8 @@ class ContractExpand extends React.Component {
     const intentOptions = navigation.getParam('intentOptions', []);
     const priorityOptions = navigation.getParam('priorityOptions', []);
 
+    console.log('Info: ', info);
+
     return (
       <SafeAreaView>
         <View style={[styles.header, styles.row]}>
@@ -27,7 +29,7 @@ class ContractExpand extends React.Component {
             <FontAwesome name="angle-left" size={30} color="#fff" />
           </TouchableOpacity>
           <View style={styles.contractName}>
-            <Text style={styles.contractText}>{info.title}</Text>
+            <Text style={styles.contractText}>{info.name}</Text>
           </View>
           {/* <View style={styles.stateContainer}>
             <Text style={styles.state}>{_.capitalize(info.state)}</Text>
@@ -65,48 +67,52 @@ class ContractExpand extends React.Component {
           <View>
             <View style={styles.borderTop}>
               <Text>Comments:</Text>
-              {info.comments.items.map(comment => (
-                <View style={styles.row}>
-                  <FontAwesome
-                    name="angle-right"
-                    size={20}
-                    color={colors.navy}
-                  />
-                  <View style={[styles.center, styles.notification]}>
-                    <Text>{comment.content}</Text>
+              {info.comments &&
+                info.comments.items &&
+                info.comments.items.map(comment => (
+                  <View style={styles.row}>
+                    <FontAwesome
+                      name="angle-right"
+                      size={20}
+                      color={colors.navy}
+                    />
+                    <View style={[styles.center, styles.notification]}>
+                      <Text>{comment.content}</Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </View>
             <View style={styles.borderTop}>
               <Text>Alerts:</Text>
-              {info.alert.items.map(al => (
-                <View style={styles.row}>
-                  <FontAwesome
-                    name="angle-right"
-                    size={20}
-                    color={colors.navy}
-                  />
-                  <View style={[styles.center, styles.notification]}>
-                    <Text>{al.content}</Text>
+              {info.alert &&
+                info.alert.items.map(al => (
+                  <View style={styles.row}>
+                    <FontAwesome
+                      name="angle-right"
+                      size={20}
+                      color={colors.navy}
+                    />
+                    <View style={[styles.center, styles.notification]}>
+                      <Text>{al.content}</Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </View>
             <View style={styles.borderBoth}>
               <Text>Actions:</Text>
-              {info.action.items.map(action => (
-                <View style={styles.row}>
-                  <FontAwesome
-                    name="angle-right"
-                    size={20}
-                    color={colors.navy}
-                  />
-                  <View style={[styles.center, styles.notification]}>
-                    <Text>{action.content}</Text>
+              {info.action &&
+                info.action.items.map(action => (
+                  <View style={styles.row}>
+                    <FontAwesome
+                      name="angle-right"
+                      size={20}
+                      color={colors.navy}
+                    />
+                    <View style={[styles.center, styles.notification]}>
+                      <Text>{action.content}</Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </View>
             {/* <View style={styles.entities}>
                   <Text>Entities:</Text>
@@ -128,4 +134,5 @@ class ContractExpand extends React.Component {
   }
 }
 
-export default withNavigation(ContractExpand);
+// export default withNavigation(ContractExpand);
+export default ContractExpand;

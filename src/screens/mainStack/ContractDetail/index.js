@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import { compose, graphql, withApollo } from 'react-apollo';
+import { SafeAreaView, ScrollView, View, Text } from 'react-native';
+import { compose, graphql } from 'react-apollo';
 
 import HeaderBar from '../../../components/HeaderBar';
 import Notification from '../../../components/Notification';
@@ -65,7 +59,7 @@ class ContractDetail extends React.Component {
               info={contract}
               intentOptions={intentOptions}
               priorityOptions={priorityOptions}
-              onPressStretch={() => this.onPressStretch(bt)}
+              onPressStretch={() => this.onPressStretch(contract)}
             />
           ) : (
             // ))

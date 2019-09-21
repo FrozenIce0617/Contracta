@@ -161,7 +161,7 @@ export const GetContractDocument = gql`
 
 export const GetUser = gql`
   query getUser($id: ID!) {
-    getContract(id: $id) {
+    getUser(id: $id) {
       id
       firstname
       lastname
