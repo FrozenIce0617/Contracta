@@ -11,7 +11,7 @@ import { Auth } from 'aws-amplify';
 import { Avatar, Divider, Button } from 'react-native-elements';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-import ContractDetailScreen from '../../screens/mainStack/ContractDetail';
+import MetaContractScreen from '../../screens/mainStack/MetaContract';
 import FeedbackScreen from '../../screens/mainStack/Feedback';
 import ProfileScreen from '../../screens/mainStack/Profile';
 import AboutScreen from '../../screens/mainStack/AboutApp';
@@ -104,7 +104,7 @@ class DrawerComponent extends React.Component {
 const AppDrawerNavigator = createDrawerNavigator(
   {
     [drawerTitles.Home]: {
-      screen: ContractDetailScreen,
+      screen: MetaContractScreen,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons name="home" size={24} style={{ color: tintColor }} />
