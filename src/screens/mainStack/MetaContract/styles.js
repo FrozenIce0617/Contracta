@@ -15,13 +15,13 @@ const styles = StyleSheet.create({
   contractContainer: {
     flex: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignContent: 'flex-start',
     justifyContent: 'flex-start',
   },
   contractItem: {
     flexDirection: 'column',
     width: scalingUtils.scale(85),
+    height: scalingUtils.verticalScale(180),
     margin: scalingUtils.scale(15),
   },
   preview: {
@@ -45,6 +45,14 @@ const styles = StyleSheet.create({
   previewIcon: {
     width: scalingUtils.scale(80),
     height: scalingUtils.scale(80),
+  },
+  category: {
+    margin: scalingUtils.verticalScale(10),
+    marginLeft: scalingUtils.scale(20),
+    marginTop: scalingUtils.verticalScale(20),
+    marginBottom: 0,
+    fontSize: scalingUtils.verticalScale(20),
+    color: colors.navy,
   },
 });
 

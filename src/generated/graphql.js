@@ -167,6 +167,15 @@ export const GetUser = gql`
       lastname
       contractaemail
       isTermsAndPrivacyAgreed
+      files {
+        items {
+          id
+          filename
+          folder
+          source
+          filestate
+        }
+      }
     }
   }
 `;
@@ -244,6 +253,25 @@ export const MetaContractList = gql`
         id
         name
         description
+        userowner {
+          id
+          firstname
+          lastname
+          useremail
+          s3folder
+          contractaemail
+          isTermsAndPrivacyAgreed
+          files {
+            items {
+              id
+              filename
+              folder
+              source
+              filestate
+            }
+            nextToken
+          }
+        }
         contracts {
           items {
             id

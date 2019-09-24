@@ -41,6 +41,8 @@ class MetaContract extends React.Component {
   render() {
     const { contract, loading } = this.props;
 
+    console.log('Contracts: ', contract, loading);
+
     if (loading === true) {
       return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -68,36 +70,85 @@ class MetaContract extends React.Component {
             onPress={this.onPressUpload}
           />
         </View>
-        <ScrollView>
-          <View style={styles.center}>
-            {Object.keys(contract).length !== 0 ? (
-              <View style={styles.contractContainer}>
-                {contract.map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => this.onPressDetails(item)}
-                  >
-                    <View style={styles.contractItem}>
-                      <View style={[styles.preview, styles.center]}>
-                        <Image
-                          source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
-                          style={styles.previewIcon}
-                        />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.category}>Processed Files</Text>
+          <ScrollView horizontal>
+            <View>
+              {Object.keys(contract).length !== 0 ? (
+                <View style={styles.contractContainer}>
+                  {contract.map(item => (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => this.onPressDetails(item)}
+                    >
+                      <View style={styles.contractItem}>
+                        <View style={[styles.preview, styles.center]}>
+                          <Image
+                            source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
+                            style={styles.previewIcon}
+                          />
+                        </View>
+                        <Text style={{ textAlign: 'center' }}>{item.name}</Text>
                       </View>
-                      <Text style={{ textAlign: 'center' }}>{item.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ) : (
-              <SafeAreaView>
-                <View style={styles.center}>
-                  <Text>No Contract</Text>
+                    </TouchableOpacity>
+                  ))}
                 </View>
-              </SafeAreaView>
-            )}
-          </View>
-        </ScrollView>
+              ) : (
+                <SafeAreaView>
+                  <View style={styles.center}>
+                    <Text>No Contract</Text>
+                  </View>
+                </SafeAreaView>
+              )}
+            </View>
+          </ScrollView>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.category}>Unprocessed Files</Text>
+          <ScrollView horizontal>
+            <View>
+              {Object.keys(contract).length !== 0 ? (
+                <View style={styles.contractContainer}>
+                  {contract.map(item =>
+                    item.userowner.files.items.map((unprocessedFile, index) => {
+                      if (unprocessedFile.filestate !== 0) return;
+                      console.log(
+                        'Unprocessed File: ',
+                        unprocessedFile.filename,
+                      );
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          // onPress={() => this.onPressDetails(item)}
+                        >
+                          <View style={styles.contractItem}>
+                            <View style={[styles.preview, styles.center]}>
+                              <Image
+                                source={{
+                                  uri: 'https://imgur.com/Tq8xJsD.png',
+                                }}
+                                style={styles.previewIcon}
+                              />
+                            </View>
+                            <Text style={{ textAlign: 'center' }}>
+                              {unprocessedFile.filename}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }),
+                  )}
+                </View>
+              ) : (
+                <SafeAreaView>
+                  <View style={styles.center}>
+                    <Text>No Contract</Text>
+                  </View>
+                </SafeAreaView>
+              )}
+            </View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
