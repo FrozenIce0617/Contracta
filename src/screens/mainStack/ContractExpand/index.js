@@ -31,9 +31,6 @@ class ContractExpand extends React.Component {
           <View style={styles.contractName}>
             <Text style={styles.contractText}>{info.name}</Text>
           </View>
-          {/* <View style={styles.stateContainer}>
-            <Text style={styles.state}>{_.capitalize(info.state)}</Text>
-          </View> */}
         </View>
         <View style={styles.container}>
           <View>

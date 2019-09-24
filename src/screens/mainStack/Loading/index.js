@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Auth } from 'aws-amplify';
-import { Query } from 'react-apollo';
+import { withApollo } from '@apollo/react-hoc';
+import { ApolloConsumer } from 'react-apollo';
 
 import { GetUser } from '../../../generated/graphql';
 
@@ -12,10 +13,11 @@ class Loading extends React.Component {
     id: '',
   };
 
-  componentWillMount() {
+  componentDidMount() {
     Auth.currentUserInfo()
       .then(res => {
-        this.setState(id, res.username);
+        console.log('CurrentUserInfo: ', res);
+        this.setState({ id: res.username });
       })
       .catch(err => console.log(err));
   }
@@ -24,26 +26,17 @@ class Loading extends React.Component {
     const { navigation } = this.props;
     const { id } = this.state;
 
+    console.log('CLIENT: ', client);
+
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Query query={GetUser} variables={{ id }}>
-            {({ loading, error, data }) => {
-              console.log('HERE: ', data);
-              if (loading || error)
-                return <ActivityIndicator size="large" color="#808080" />;
-
-              if (!data.getUser.isTermsAndPrivacyAgreed) {
-                navigation.navigate('Privacy');
-              } else {
-                navigation.navigate('ContractDetail');
-              }
-            }}
-          </Query>
+          <ActivityIndicator size="large" color="#808080" />
         </View>
       </SafeAreaView>
     );
   }
 }
 
+// export default withApollo(Loading);
 export default Loading;

@@ -17,10 +17,6 @@ class Header extends React.Component {
           <Text style={styles.text}>
             Hi {name}, viewing "{contract}" contract
           </Text>
-          <Text style={styles.text}>Next due: $500, LTV: $500</Text>
-          <Text style={styles.text}>
-            Negotiated Last Date: 25/5/18, version: 2
-          </Text>
         </View>
       </View>
     );

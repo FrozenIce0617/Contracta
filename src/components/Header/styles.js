@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: colors.navy,
+    height: scalingUtils.scale(50),
   },
   avatar: {
     marginLeft: scalingUtils.scale(10),
@@ -13,6 +14,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
+    display: 'flex',
+    justifyContent: 'center',
     flexDirection: 'column',
     marginLeft: scalingUtils.scale(10),
     marginTop: scalingUtils.verticalScale(10),
