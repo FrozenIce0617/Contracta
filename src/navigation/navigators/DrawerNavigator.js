@@ -11,6 +11,7 @@ import { Avatar, Divider, Button } from 'react-native-elements';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 import MetaContractScreen from '../../screens/mainStack/MetaContract';
+import TimeLineModuleScreen from '../../screens/mainStack/Timeline';
 import FeedbackScreen from '../../screens/mainStack/Feedback';
 import ProfileScreen from '../../screens/mainStack/Profile';
 import AboutScreen from '../../screens/mainStack/AboutApp';
@@ -18,6 +19,7 @@ import { scalingUtils } from '../../styles';
 
 const drawerTitles = {
   Home: 'Home',
+  TimelineModule: 'Timeline',
   Feedback: 'Feedback',
   Settings: 'Settings',
   About: 'About App',
@@ -106,6 +108,18 @@ const AppDrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons name="home" size={24} style={{ color: tintColor }} />
+        ),
+      },
+    },
+    [drawerTitles.TimelineModule]: {
+      screen: TimeLineModuleScreen,
+      navigationOptions: {
+        drawerIcon: ({ tintColor }) => (
+          <SimpleLineIcons
+            name="clock"
+            size={24}
+            style={{ color: tintColor }}
+          />
         ),
       },
     },
