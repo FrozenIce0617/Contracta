@@ -71,6 +71,22 @@ export const GetContractDocument = gql`
       url
       date
       arn
+      alerts {
+        items {
+          id
+          content
+          state
+        }
+        nextToken
+      }
+      actions {
+        items {
+          id
+          content
+          state
+        }
+        nextToken
+      }
       Stats {
         alerts
         actions

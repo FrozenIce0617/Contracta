@@ -26,6 +26,7 @@ class ContractDetail extends React.Component {
   
   onPressBell = item => {
     const { navigation } = this.props;
+    console.log('Bell Pressed, passing item : ', item);
     navigation.navigate('ContractAlert', {
       item
     });
@@ -73,9 +74,9 @@ class ContractDetail extends React.Component {
       <SafeAreaView style={styles.container}>
         <HeaderBar heading={item.name} {...this.props} />
         <Notification 
-        onPressBell={() => this.onPressBell(item)}
-        onPressFlash={() => this.onPressFlash(item)}
-        onPressComment={() => this.onPressComment(item)}
+        onPressBell={() => this.onPressBell(contract)}
+        onPressFlash={() => this.onPressFlash(contract)}
+        onPressComment={() => this.onPressComment(contract)}
         />
         <ScrollView>
           {Object.keys(contract).length !== 0 ? (
