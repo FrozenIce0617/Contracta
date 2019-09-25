@@ -11,6 +11,7 @@ import {
 import { compose, graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
 import { Button } from 'react-native-elements';
+import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { MetaContractList } from '../../../generated/graphql';
@@ -36,7 +37,37 @@ class MetaContract extends React.Component {
     navigation.navigate('ContractDetail', { item });
   };
 
-  onPressUpload = () => {};
+  _parseFile = async file => {
+    const fileName = file.uri.replace(/^.*[\\\/]/, '');
+    const fileType = mime.lookup(file.uri);
+    const access = { level: 'private', contentType: 'text/plain' };
+    const fileData = await fetch(file.uri);
+    const blobData = await fileData.blob();
+
+    try {
+      let putresponse = await Storage.put(fileName, blobData, access);
+      console.log('S3 response: ', putresponse);
+    } catch (err) {
+      console.log('error: ', err);
+    }
+  };
+
+  onPressUpload = async () => {
+    console.log('Hi');
+    try {
+      console.log('Hello');
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.plainText],
+      });
+      if (res.type === 'success') this._parseFile(res);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled
+      } else {
+        throw err;
+      }
+    }
+  };
 
   render() {
     const { contract, loading } = this.props;

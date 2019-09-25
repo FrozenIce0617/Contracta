@@ -22,7 +22,7 @@ class EditProfile extends React.Component {
                   size={120}
                   source={{
                     uri:
-                      'https://media.licdn.com/dms/image/C5603AQFyP0hSigsLNw/profile-displayphoto-shrink_200_200/0?e=1568851200&v=beta&t=0Y5zFoawOp7zEa5yAL1DhqwBAeLuxQFQJvi8hyurnnc',
+                      'https://media.licdn.com/dms/image/C5603AQFyP0hSigsLNw/profile-displayphoto-shrink_200_200/0?e=1574899200&v=beta&t=AlM0djBDMmhtsVs5qdUliUmEbQJq-ZwGN_3eMFHwk_o',
                   }}
                   containerStyle={styles.avatarStyle}
                   showEditButton

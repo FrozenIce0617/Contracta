@@ -20,8 +20,6 @@ class ContractExpand extends React.Component {
     const intentOptions = navigation.getParam('intentOptions', []);
     const priorityOptions = navigation.getParam('priorityOptions', []);
 
-    console.log('Info: ', info);
-
     return (
       <SafeAreaView>
         <View style={[styles.header, styles.row]}>
