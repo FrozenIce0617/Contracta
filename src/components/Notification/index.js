@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,12 +9,17 @@ import styles from './styles';
 
 class Notification extends React.Component {
   render() {
+    const { onPressBell, onPressEmail, onPressFlash, onPressShare, onPressExport, onPressComment  } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.section}>
             <View style={styles.icon}>
-              <FontAwesome name="bell-o" size={30} color="#000" />
+              
+              <TouchableOpacity onPress={onPressBell}>
+                <FontAwesome name="bell-o" size={30} color="#000" />
+                {/*<MaterialIcons name="expand-more" size={30} color="#000" />*/}
+              </TouchableOpacity>
             </View>
             <Text style={styles.count}>2</Text>
           </View>
@@ -26,7 +31,11 @@ class Notification extends React.Component {
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
+              
+              <TouchableOpacity onPress={onPressFlash}>
               <Ionicons name="ios-flash" size={30} color="#000" />
+                
+              </TouchableOpacity>
             </View>
             <Text style={styles.count}>2</Text>
           </View>
@@ -46,7 +55,11 @@ class Notification extends React.Component {
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
+              
+              <TouchableOpacity onPress={onPressComment}>
               <FontAwesome name="comment-o" size={30} color="#000" />
+                
+              </TouchableOpacity>
             </View>
             <Text style={styles.count}>5</Text>
           </View>

@@ -27,7 +27,7 @@ class ContractExpand extends React.Component {
             <FontAwesome name="angle-left" size={30} color="#fff" />
           </TouchableOpacity>
           <View style={styles.contractName}>
-            <Text style={styles.contractText}>{info.name}</Text>
+            <Text style={styles.contractText}>{info.title}</Text>
           </View>
         </View>
         <View style={styles.container}>

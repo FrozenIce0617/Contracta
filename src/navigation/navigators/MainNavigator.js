@@ -6,6 +6,9 @@ import PrivacyScreen from '../../screens/mainStack/Privacy';
 import MetaContractListScreen from '../../screens/mainStack/MetaContract';
 import ContractDetailScreen from '../../screens/mainStack/ContractDetail';
 import ContractExpandScreen from '../../screens/mainStack/ContractExpand';
+import ContractAlertScreen from '../../screens/mainStack/ContractAlert';
+import ContractActionScreen from '../../screens/mainStack/ContractAction';
+import ContractCommentScreen from '../../screens/mainStack/ContractComment';
 import ProfileScreen from '../../screens/mainStack/Profile';
 import EditProfileScreen from '../../screens/mainStack/EditProfile';
 import FeedbackScreen from '../../screens/mainStack/Feedback';
@@ -18,6 +21,9 @@ const MainNavigator = createStackNavigator(
     MetaContract: { screen: MetaContractListScreen },
     ContractDetail: { screen: ContractDetailScreen },
     ContractExpand: { screen: ContractExpandScreen },
+    ContractAlert: { screen: ContractAlertScreen },
+    ContractAction: { screen: ContractActionScreen },
+    ContractComment: { screen: ContractCommentScreen },
     Profile: { screen: ProfileScreen },
     EditProfile: { screen: EditProfileScreen },
     Feedback: { screen: FeedbackScreen },

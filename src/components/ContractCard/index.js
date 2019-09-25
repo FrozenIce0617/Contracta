@@ -14,7 +14,7 @@ class ContractCard extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
           <View style={styles.row}>
             <View style={styles.category}>
               <Text>INTENT: </Text>
@@ -40,9 +40,9 @@ class ContractCard extends React.Component {
         </View>
         <View>
           <Text style={styles.textCategory}>Content:</Text>
-        </View>
+        </View> */}
         <View style={styles.borderBottom}>
-          <Text>{info.description}</Text>
+          <Text>{info.rawtext}</Text>
         </View>
         <View style={[styles.row, styles.spaceBetween]}>
           <View style={styles.section}>
