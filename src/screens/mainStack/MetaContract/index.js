@@ -102,7 +102,7 @@ class MetaContract extends React.Component {
           />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.category}>Processed Files</Text>
+          <Text style={styles.category}>Processed Contracts</Text>
           <ScrollView horizontal>
             <View>
               {Object.keys(contract).length !== 0 ? (
@@ -135,7 +135,7 @@ class MetaContract extends React.Component {
           </ScrollView>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.category}>Unprocessed Files</Text>
+          <Text style={styles.category}>Unprocessed Contracts</Text>
           <ScrollView horizontal>
             <View>
               {Object.keys(contract).length !== 0 ? (
