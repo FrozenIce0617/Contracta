@@ -7,6 +7,9 @@ import styles from './styles';
 
 class EditProfile extends React.Component {
   render() {
+    const { navigation } = this.props;
+    const userInfo = navigation.getParam('userInfo', {});
+
     return (
       <SafeAreaView style={styles.safeContainer}>
         <HeaderBar heading="Edit Profile" {...this.props} />
@@ -31,9 +34,9 @@ class EditProfile extends React.Component {
             </ImageBackground>
           </View>
           <View style={styles.infoContainer}>
-            <Input placeholder="First Name" />
-            <Input placeholder="Last Name" />
-            <Input placeholder="Email" />
+            <Input placeholder="First Name" defaultValue={userInfo.firstname} />
+            <Input placeholder="Last Name" defaultValue={userInfo.lastname} />
+            <Input placeholder="Email" defaultValue={userInfo.contractaemail} />
           </View>
           <View style={styles.btnRow}>
             <Button buttonStyle={styles.cancel} title="Cancel" />

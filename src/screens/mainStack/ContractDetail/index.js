@@ -23,30 +23,28 @@ const priorityOptions = [
 ];
 //Todo: implement onPressBell, onPressEmail, onPressFlash, onPressShare, onPressExport, onPressComment
 class ContractDetail extends React.Component {
-  
   onPressBell = item => {
     const { navigation } = this.props;
     console.log('Bell Pressed, passing item : ', item);
     navigation.navigate('ContractAlert', {
-      item
+      item,
     });
   };
 
   onPressFlash = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractAction', {
-      item
+      item,
     });
   };
 
   onPressComment = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractComment', {
-      item
+      item,
     });
   };
-  
-  
+
   onPressStretch = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractExpand', {
@@ -73,26 +71,25 @@ class ContractDetail extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <HeaderBar heading={item.name} {...this.props} />
-        <Notification 
-        onPressBell={() => this.onPressBell(contract)}
-        onPressFlash={() => this.onPressFlash(contract)}
-        onPressComment={() => this.onPressComment(contract)}
+        <Notification
+          onPressBell={() => this.onPressBell(contract)}
+          onPressFlash={() => this.onPressFlash(contract)}
+          onPressComment={() => this.onPressComment(contract)}
         />
         <ScrollView>
           {Object.keys(contract).length !== 0 ? (
-             contract.bodytext.items
-               .sort((a, b) => a.seqnr - b.seqnr)
-               .map((bt, i) => (
-            <ContractCard
-              key={i}
-              info={bt}
-              intentOptions={intentOptions}
-              priorityOptions={priorityOptions}
-              onPressStretch={() => this.onPressStretch(bt)}
-            />
-            ))
+            contract.bodytext.items
+              .sort((a, b) => a.seqnr - b.seqnr)
+              .map((bt, i) => (
+                <ContractCard
+                  key={i}
+                  info={bt}
+                  intentOptions={intentOptions}
+                  priorityOptions={priorityOptions}
+                  onPressStretch={() => this.onPressStretch(bt)}
+                />
+              ))
           ) : (
-            
             <SafeAreaView>
               <View style={styles.center}>
                 <Text>No contract</Text>

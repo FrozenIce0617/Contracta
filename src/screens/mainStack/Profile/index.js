@@ -6,19 +6,24 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { compose, graphql } from 'react-apollo';
 import { Avatar } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import { GetUser } from '../../../generated/graphql';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
 class Profile extends React.Component {
   onEditProfile = () => {
-    const { navigation } = this.props;
-    navigation.navigate('EditProfile');
+    const { navigation, userInfo } = this.props;
+    navigation.navigate('EditProfile', {
+      userInfo,
+    });
   };
 
   render() {
+    const { userInfo } = this.props;
     return (
       <SafeAreaView style={styles.safeContainer}>
         <HeaderBar heading="Profile" {...this.props} />
@@ -53,11 +58,11 @@ class Profile extends React.Component {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoHeading}>First Name</Text>
-            <Text style={styles.infoContent}>Sandeep</Text>
+            <Text style={styles.infoContent}>{userInfo.firstname}</Text>
             <Text style={styles.infoHeading}>Last Name</Text>
-            <Text style={styles.infoContent}>Mehta</Text>
+            <Text style={styles.infoContent}>{userInfo.lastname}</Text>
             <Text style={styles.infoHeading}>Email</Text>
-            <Text style={styles.infoContent}>Sandeep Mehta</Text>
+            <Text style={styles.infoContent}>{userInfo.contractaemail}</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -65,4 +70,20 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+export default compose(
+  graphql(GetUser, {
+    options: props => {
+      const { navigation } = props;
+      const userId = navigation.getParam('username', '');
+      return {
+        variables: {
+          id: userId,
+        },
+      };
+    },
+    props: props => ({
+      userInfo: props.data.getUser ? props.data.getUser : {},
+      loading: props.data.loading,
+    }),
+  }),
+)(Profile);

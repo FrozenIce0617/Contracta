@@ -136,7 +136,7 @@ const AppDrawerNavigator = createDrawerNavigator(
       },
     },
     [drawerTitles.Settings]: {
-      screen: ProfileScreen,
+      screen: props => <ProfileScreen {...props} />,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons
