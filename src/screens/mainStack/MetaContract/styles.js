@@ -54,6 +54,57 @@ const styles = StyleSheet.create({
     fontSize: scalingUtils.verticalScale(20),
     color: colors.navy,
   },
+  safeContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(30, 30, 30, 0.8)',
+  },
+  termsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  termsRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  termsCardContainer: {
+    width: '80%',
+    borderRadius: scalingUtils.scale(15),
+  },
+  termsTitle: {
+    color: colors.navy,
+  },
+  termsContent: {
+    textAlign: 'justify',
+  },
+  termsLink: {
+    color: colors.navy,
+    textAlign: 'center',
+    marginTop: scalingUtils.scale(15),
+  },
+  termsDivider: {
+    marginTop: scalingUtils.scale(20),
+    marginBottom: scalingUtils.scale(20),
+    height: scalingUtils.verticalScale(0.5),
+    backgroundColor: colors.navy,
+  },
+  termsAccept: {
+    backgroundColor: colors.navy,
+    paddingLeft: scalingUtils.scale(20),
+    paddingRight: scalingUtils.scale(20),
+    borderRadius: scalingUtils.scale(20),
+    width: scalingUtils.scale(120),
+    height: scalingUtils.scale(40),
+  },
+  termsDecline: {
+    backgroundColor: colors.gray,
+    paddingLeft: scalingUtils.scale(20),
+    paddingRight: scalingUtils.scale(20),
+    borderRadius: scalingUtils.scale(20),
+    width: scalingUtils.scale(120),
+    height: scalingUtils.scale(40),
+  },
 });
 
 export default styles;

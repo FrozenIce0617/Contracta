@@ -9,25 +9,17 @@ import { GetUser } from '../../../generated/graphql';
 import styles from './styles';
 
 class Loading extends React.Component {
-  state = {
-    id: '',
-  };
-
   componentDidMount() {
     Auth.currentUserInfo()
       .then(res => {
-        console.log('CurrentUserInfo: ', res);
-        this.setState({ id: res.username });
+        this.props.navigation.navigate('Drawer', {
+          username: res.username,
+        });
       })
       .catch(err => console.log(err));
   }
 
   render() {
-    const { navigation } = this.props;
-    const { id } = this.state;
-
-    console.log('CLIENT: ', client);
-
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
@@ -38,5 +30,4 @@ class Loading extends React.Component {
   }
 }
 
-// export default withApollo(Loading);
 export default Loading;

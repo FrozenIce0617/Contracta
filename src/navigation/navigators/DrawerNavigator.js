@@ -104,7 +104,7 @@ class DrawerComponent extends React.Component {
 const AppDrawerNavigator = createDrawerNavigator(
   {
     [drawerTitles.Home]: {
-      screen: MetaContractScreen,
+      screen: props => <MetaContractScreen {...props} />,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons name="home" size={24} style={{ color: tintColor }} />

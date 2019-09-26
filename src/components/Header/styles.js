@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     marginBottom: scalingUtils.verticalScale(10),
   },
   text: {
+    width: scalingUtils.scale(300),
     fontSize: scalingUtils.verticalScale(16),
     color: colors.white,
   },

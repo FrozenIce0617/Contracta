@@ -7,14 +7,15 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import { compose, graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
-import { Button } from 'react-native-elements';
+import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { MetaContractList } from '../../../generated/graphql';
+import { MetaContractList, GetUser } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
@@ -23,6 +24,7 @@ import styles from './styles';
 class MetaContract extends React.Component {
   state = {
     userId: '',
+    showModal: '',
   };
 
   componentWillMount() {
@@ -70,9 +72,10 @@ class MetaContract extends React.Component {
   };
 
   render() {
-    const { contract, loading } = this.props;
-
-    console.log('Contracts: ', contract, loading);
+    const { contract, userInfo, loading } = this.props;
+    const { showModal } = this.state;
+    const isVisible =
+      showModal === '' ? !userInfo.isTermsAndPrivacyAgreed : showModal;
 
     if (loading === true) {
       return (
@@ -86,11 +89,54 @@ class MetaContract extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={isVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}
+        >
+          <SafeAreaView style={styles.safeContainer}>
+            <View style={styles.termsContainer}>
+              <Card
+                title="Terms & Conditions"
+                containerStyle={styles.termsCardContainer}
+                titleStyle={styles.termsTitle}
+              >
+                <Text style={styles.termsContent}>
+                  If you would like to contact us to understand more about this
+                  Agreement or wish to contact us concerning any matter relating
+                  to it, you may send an email to info@contracta.com.
+                </Text>
+                <Text style={styles.termsContent}>
+                  This document was last updated on September 9, 2019.
+                </Text>
+                <Text style={styles.termsLink}>Privacy Policy</Text>
+                <Text style={styles.termsLink}>Terms of Use</Text>
+                <Divider style={styles.termsDivider} />
+                <View style={styles.termsRow}>
+                  <Button buttonStyle={styles.termsAccept} title="Accept" />
+                  <Button
+                    buttonStyle={styles.termsDecline}
+                    title="Decline"
+                    onPress={() => {
+                      this.setState({ showModal: false });
+                    }}
+                  />
+                </View>
+              </Card>
+            </View>
+          </SafeAreaView>
+        </Modal>
         <HeaderNavigatorBar {...this.props} />
-        <Header name="Ian" contract="12Eastcote" />
+        <Header
+          name={`${userInfo.firstname} ${userInfo.lastname}`}
+          contract="12Eastcote"
+        />
         <View style={styles.email}>
           <Text style={styles.navy}>
-            Your contracta email: xyz@contracta.xyz
+            Your contracta email: {userInfo.contractaemail}
           </Text>
         </View>
         <View style={styles.btnUpload}>
@@ -196,6 +242,20 @@ const MetaContractWithData = compose(
         loading: props.data.loading,
       };
     },
+  }),
+  graphql(GetUser, {
+    options: props => {
+      const { navigation } = props;
+      const userId = navigation.getParam('username', '');
+      return {
+        variables: {
+          id: userId,
+        },
+      };
+    },
+    props: props => ({
+      userInfo: props.data.getUser ? props.data.getUser : {},
+    }),
   }),
 )(MetaContract);
 

@@ -29,7 +29,7 @@ const MainNavigator = createStackNavigator(
     Feedback: { screen: FeedbackScreen },
   },
   {
-    initialRouteName: 'Drawer',
+    initialRouteName: 'Loading',
     headerMode: 'none',
   },
 );
