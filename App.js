@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { withAuthenticator } from 'aws-amplify-react-native';
-import Amplify from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import AWSAppSyncClient from 'aws-appsync';
 import { ApolloProvider } from 'react-apollo';
 
@@ -23,19 +23,21 @@ Amplify.configure({
   },
 });
 
+const client = new AWSAppSyncClient({
+  url: awsConfig.aws_appsync_graphqlEndpoint,
+  region: awsConfig.aws_appsync_region,
+  auth: {
+    type: awsConfig.aws_appsync_authenticationType,
+    jwtToken: async () =>
+      (await Auth.currentSession()).getIdToken().getJwtToken(),
+  },
+});
+
 type Props = {};
 class App extends Component<Props> {
   render() {
     const { authData, onStateChange } = this.props;
     console.log(authData.signInUserSession.idToken.jwtToken);
-    const client = new AWSAppSyncClient({
-      url: awsConfig.aws_appsync_graphqlEndpoint,
-      region: awsConfig.aws_appsync_region,
-      auth: {
-        type: awsConfig.aws_appsync_authenticationType,
-        jwtToken: authData.signInUserSession.idToken.jwtToken,
-      },
-    });
 
     return (
       <ApolloProvider client={client}>
