@@ -30,7 +30,6 @@ class MetaContract extends React.Component {
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
       this.setState({ userId: res.id });
-      console.log('Auth Session: ', res);
     });
   }
 
@@ -55,9 +54,7 @@ class MetaContract extends React.Component {
   };
 
   onPressUpload = async () => {
-    console.log('Hi');
     try {
-      console.log('Hello');
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.plainText],
       });
@@ -189,10 +186,6 @@ class MetaContract extends React.Component {
                   {contract.map(item =>
                     item.userowner.files.items.map((unprocessedFile, index) => {
                       if (unprocessedFile.filestate !== 0) return;
-                      console.log(
-                        'Unprocessed File: ',
-                        unprocessedFile.filename,
-                      );
                       return (
                         <TouchableOpacity
                           key={index}

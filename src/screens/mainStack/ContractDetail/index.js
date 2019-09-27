@@ -25,7 +25,6 @@ const priorityOptions = [
 class ContractDetail extends React.Component {
   onPressBell = item => {
     const { navigation } = this.props;
-    console.log('Bell Pressed, passing item : ', item);
     navigation.navigate('ContractAlert', {
       item,
     });
@@ -119,7 +118,6 @@ const ContractDetailWithData = compose(
       };
     },
     props: props => {
-      console.log('DATA: ', props.data.getContract);
       return {
         contract: props.data.getContract ? props.data.getContract : [],
         loading: props.data.loading,

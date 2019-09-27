@@ -31,6 +31,13 @@ class DrawerComponent extends React.Component {
     loginStatus: 'signIn',
   };
 
+  onSignOut = () => {
+    const { screenProps } = this.props;
+    Auth.signOut()
+      .then(() => screenProps.onStateChange('signedOut', null))
+      .catch(err => console.log(err));
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -55,16 +62,7 @@ class DrawerComponent extends React.Component {
           <DrawerItems {...this.props} />
           <Divider />
           <Button
-            onPress={() => {
-              Auth.signOut()
-                .then(res => {
-                  this.setState({
-                    loginStatus: 'signOut',
-                  });
-                  this.forceUpdate();
-                })
-                .catch(err => console.log(err));
-            }}
+            onPress={this.onSignOut}
             type="clear"
             buttonStyle={{
               margin: 0,

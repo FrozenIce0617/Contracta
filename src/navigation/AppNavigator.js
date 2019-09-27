@@ -7,7 +7,7 @@ import DrawerNavigator from './navigators/DrawerNavigator';
 const AppNavigator = createSwitchNavigator(
   {
     auth: AuthNavigator,
-    drawer: DrawerNavigator,
+    drawer: screenProps => <DrawerNavigator screenProps={screenProps} />,
     main: MainNavigator,
   },
   {

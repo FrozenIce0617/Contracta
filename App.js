@@ -26,7 +26,7 @@ Amplify.configure({
 type Props = {};
 class App extends Component<Props> {
   render() {
-    const { authData } = this.props;
+    const { authData, onStateChange } = this.props;
     console.log(authData.signInUserSession.idToken.jwtToken);
     const client = new AWSAppSyncClient({
       url: awsConfig.aws_appsync_graphqlEndpoint,
@@ -40,7 +40,7 @@ class App extends Component<Props> {
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
-          <NavigatorContainer />
+          <NavigatorContainer onStateChange={onStateChange} />
         </ApolloHooksProvider>
       </ApolloProvider>
     );
