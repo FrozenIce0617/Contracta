@@ -15,7 +15,7 @@ class Header extends React.Component {
         </View>
         <View style={styles.content}>
           <Text style={styles.text}>
-            Hi {name}, viewing "{contract}" contract
+            Hi {name}, welcome to Contracta
           </Text>
         </View>
       </View>

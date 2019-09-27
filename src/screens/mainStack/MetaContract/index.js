@@ -15,7 +15,7 @@ import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { MetaContractList, GetUser } from '../../../generated/graphql';
+import { MetaContractList, GetUser, Create } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
@@ -38,6 +38,8 @@ class MetaContract extends React.Component {
     navigation.navigate('ContractDetail', { item });
   };
 
+
+
   _parseFile = async file => {
     const fileName = file.uri.replace(/^.*[\\\/]/, '');
     const fileType = mime.lookup(file.uri);
@@ -48,6 +50,7 @@ class MetaContract extends React.Component {
     try {
       let putresponse = await Storage.put(fileName, blobData, access);
       console.log('S3 response: ', putresponse);
+      //_addFileToUser();
     } catch (err) {
       console.log('error: ', err);
     }
@@ -56,7 +59,7 @@ class MetaContract extends React.Component {
   onPressUpload = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.plainText],
+        type: [DocumentPicker.types.plainText,DocumentPicker.types.pdf],
       });
       if (res.type === 'success') this._parseFile(res);
     } catch (err) {
@@ -127,10 +130,10 @@ class MetaContract extends React.Component {
           </SafeAreaView>
         </Modal>
         <HeaderNavigatorBar {...this.props} />
-        <Header
+         <Header
           name={`${userInfo.firstname} ${userInfo.lastname}`}
-          contract="12Eastcote"
-        />
+          contract=""
+        /> 
         <View style={styles.email}>
           <Text style={styles.navy}>
             Your contracta email: {userInfo.contractaemail}
