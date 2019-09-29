@@ -38,8 +38,6 @@ class MetaContract extends React.Component {
     navigation.navigate('ContractDetail', { item });
   };
 
-
-
   _parseFile = async file => {
     const fileName = file.uri.replace(/^.*[\\\/]/, '');
     const fileType = mime.lookup(file.uri);
@@ -59,7 +57,7 @@ class MetaContract extends React.Component {
   onPressUpload = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.plainText,DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.plainText, DocumentPicker.types.pdf],
       });
       if (res.type === 'success') this._parseFile(res);
     } catch (err) {
@@ -130,10 +128,10 @@ class MetaContract extends React.Component {
           </SafeAreaView>
         </Modal>
         <HeaderNavigatorBar {...this.props} />
-         <Header
+        <Header
           name={`${userInfo.firstname} ${userInfo.lastname}`}
           contract=""
-        /> 
+        />
         <View style={styles.email}>
           <Text style={styles.navy}>
             Your contracta email: {userInfo.contractaemail}
@@ -229,6 +227,7 @@ class MetaContract extends React.Component {
 
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
+    options: { fetchPolicy: 'network-only' },
     props: props => {
       return {
         contract:
