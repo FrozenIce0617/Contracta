@@ -298,3 +298,50 @@ export const MetaContractList = gql`
     }
   }
 `;
+
+export const UpdateUser = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+      firstname
+      lastname
+      useremail
+      s3folder
+      files {
+        items {
+          id
+          filename
+          folder
+          source
+          filestate
+        }
+        nextToken
+      }
+      contractaemail
+      isTermsAndPrivacyAgreed
+      ownedmetacontracts {
+        items {
+          id
+          name
+          description
+          url
+          date
+          arn
+          state
+          access
+          docbot
+        }
+        nextToken
+      }
+      feedbackgiven {
+        items {
+          id
+          like
+          notlike
+          add
+        }
+        nextToken
+      }
+    }
+  }
+`;

@@ -9,13 +9,17 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, Mutation } from 'react-apollo';
 import { Auth } from 'aws-amplify';
 import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { MetaContractList, GetUser, Create } from '../../../generated/graphql';
+import {
+  MetaContractList,
+  GetUser,
+  UpdateUser,
+} from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
@@ -114,7 +118,23 @@ class MetaContract extends React.Component {
                 <Text style={styles.termsLink}>Terms of Use</Text>
                 <Divider style={styles.termsDivider} />
                 <View style={styles.termsRow}>
-                  <Button buttonStyle={styles.termsAccept} title="Accept" />
+                  <Mutation
+                    mutation={UpdateUser}
+                    variables={{
+                      input: {
+                        ...userInfo,
+                        isTermsAndPrivacyAgreed: true,
+                      },
+                    }}
+                  >
+                    {updateUserMutation => (
+                      <Button
+                        buttonStyle={styles.termsAccept}
+                        title="Accept"
+                        onPress={updateUserMutation}
+                      />
+                    )}
+                  </Mutation>
                   <Button
                     buttonStyle={styles.termsDecline}
                     title="Decline"
@@ -227,7 +247,7 @@ class MetaContract extends React.Component {
 
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
-    options: { fetchPolicy: 'network-only' },
+    options: { fetchPolicy: 'network-only', pollInterval: 500 },
     props: props => {
       return {
         contract:
@@ -246,6 +266,7 @@ const MetaContractWithData = compose(
         variables: {
           id: userId,
         },
+        fetchPolicy: 'network-only',
       };
     },
     props: props => ({
