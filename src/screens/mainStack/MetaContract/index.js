@@ -73,6 +73,13 @@ class MetaContract extends React.Component {
     }
   };
 
+  onSignOut = () => {
+    const { screenProps } = this.props;
+    Auth.signOut()
+      .then(() => screenProps.onStateChange('signedOut', null))
+      .catch(err => console.log(err));
+  };
+
   render() {
     const { contract, userInfo, loading } = this.props;
     const { showModal } = this.state;
@@ -145,6 +152,7 @@ class MetaContract extends React.Component {
                     title="Decline"
                     onPress={() => {
                       this.setState({ showModal: false });
+                      this.onSignOut();
                     }}
                   />
                 </View>
