@@ -345,3 +345,17 @@ export const UpdateUser = gql`
     }
   }
 `;
+
+export const UpdateTC = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+      firstname
+      lastname
+      useremail
+      s3folder
+      contractaemail
+      isTermsAndPrivacyAgreed
+    }
+  }
+`;

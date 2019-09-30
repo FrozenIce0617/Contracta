@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   MetaContractList,
   GetUser,
-  UpdateUser,
+  UpdateTC,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
@@ -119,19 +119,24 @@ class MetaContract extends React.Component {
                 <Divider style={styles.termsDivider} />
                 <View style={styles.termsRow}>
                   <Mutation
-                    mutation={UpdateUser}
+                    mutation={UpdateTC}
                     variables={{
                       input: {
-                        ...userInfo,
+                        id: userInfo.id,
                         isTermsAndPrivacyAgreed: true,
                       },
                     }}
                   >
-                    {updateUserMutation => (
+                    {updateTCMutation => (
                       <Button
                         buttonStyle={styles.termsAccept}
                         title="Accept"
-                        onPress={updateUserMutation}
+                        onPress={() => {
+                          this.setState({
+                            showModal: false,
+                          });
+                          updateTCMutation();
+                        }}
                       />
                     )}
                   </Mutation>
