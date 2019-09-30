@@ -115,6 +115,7 @@ const ContractDetailWithData = compose(
         variables: {
           id: subContractId,
         },
+        fetchPolicy: 'network-only',
       };
     },
     props: props => {

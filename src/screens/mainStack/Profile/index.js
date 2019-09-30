@@ -79,6 +79,7 @@ export default compose(
         variables: {
           id: userId,
         },
+        fetchPolicy: 'network-only',
       };
     },
     props: props => ({
