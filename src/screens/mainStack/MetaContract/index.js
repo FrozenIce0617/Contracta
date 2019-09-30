@@ -89,8 +89,6 @@ class MetaContract extends React.Component {
       );
     }
 
-    console.log('MetaContract: ', contract);
-
     return (
       <SafeAreaView style={styles.container}>
         <Modal
