@@ -41,7 +41,9 @@ class MetaContract extends React.Component {
     const { navigation } = this.props;
     navigation.navigate('ContractDetail', { item });
   };
-
+  _addFileToUser = async resp =>{
+    return
+  }
   _parseFile = async file => {
     const fileName = file.uri.replace(/^.*[\\\/]/, '');
     const fileType = mime.lookup(file.uri);
@@ -52,7 +54,7 @@ class MetaContract extends React.Component {
     try {
       let putresponse = await Storage.put(fileName, blobData, access);
       console.log('S3 response: ', putresponse);
-      //_addFileToUser();
+      _addFileToUser(putresponse);
     } catch (err) {
       console.log('error: ', err);
     }
