@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import { compose, graphql, Mutation } from 'react-apollo';
-import { Auth } from 'aws-amplify';
+import { compose, graphql, withApollo, Mutation } from 'react-apollo';
+import { Auth, Analytics } from 'aws-amplify';
 import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,6 +19,7 @@ import {
   MetaContractList,
   GetUser,
   UpdateTC,
+  CreateFile,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
@@ -26,10 +27,17 @@ import Header from '../../../components/Header';
 import styles from './styles';
 
 class MetaContract extends React.Component {
-  state = {
-    userId: '',
-    showModal: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userId: '',
+      showModal: '',
+    };
+
+    console.log('Apollo Client: ', props.client);
+    this.client = props.client;
+  }
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
@@ -39,13 +47,20 @@ class MetaContract extends React.Component {
 
   onPressDetails = item => {
     const { navigation } = this.props;
-    navigation.navigate('ContractDetail', { item });
+    const { userId } = this.state;
+
+    navigation.navigate('ContractDetail', { item, userId });
+    Analytics.record({
+      name: 'Contract Detail Visit',
+      attributes: { id: userId },
+    })
+      .then(res => console.log('Analytics Success: ', res))
+      .catch(err => console.log('Analytics Error: ', err));
   };
 
   _parseFile = async file => {
     const fileName = file.uri.replace(/^.*[\\\/]/, '');
-    const fileType = mime.lookup(file.uri);
-    const access = { level: 'private', contentType: 'text/plain' };
+    const fileType = file.type;
     const fileData = await fetch(file.uri);
     const blobData = await fileData.blob();
 
@@ -61,13 +76,11 @@ class MetaContract extends React.Component {
   onPressUpload = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.plainText, DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.images],
       });
       if (res.type === 'success') this._parseFile(res);
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled
-      } else {
+      if (!DocumentPicker.isCancel(err)) {
         throw err;
       }
     }
@@ -286,6 +299,6 @@ const MetaContractWithData = compose(
       userInfo: props.data.getUser ? props.data.getUser : {},
     }),
   }),
-)(MetaContract);
+)(withApollo(MetaContract));
 
 export default MetaContractWithData;

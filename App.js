@@ -9,17 +9,20 @@
 import React, { Component } from 'react';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { withAuthenticator } from 'aws-amplify-react-native';
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, Analytics } from 'aws-amplify';
 import AWSAppSyncClient from 'aws-appsync';
 import { ApolloProvider } from 'react-apollo';
-
 import NavigatorContainer from './src/navigation/NavigatorContainer';
 import awsConfig from './aws-exports';
 
 Amplify.configure({
   ...awsConfig,
   Analytics: {
-    disabled: true,
+    disabled: false,
+    AWSPinpoint: {
+      appId: awsConfig.aws_amplify_pinpoint_app_id,
+      region: awsConfig.aws_amplify_pinpoint_region,
+    },
   },
 });
 
