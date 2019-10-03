@@ -10,7 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import { compose, graphql, withApollo, Mutation } from 'react-apollo';
-import { Auth, Analytics } from 'aws-amplify';
+import { Auth, Analytics, Storage } from 'aws-amplify';
 import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,7 +35,6 @@ class MetaContract extends React.Component {
       showModal: '',
     };
 
-    console.log('Apollo Client: ', props.client);
     this.client = props.client;
   }
 
@@ -59,14 +58,17 @@ class MetaContract extends React.Component {
   };
 
   _parseFile = async file => {
-    const fileName = file.uri.replace(/^.*[\\\/]/, '');
-    const fileType = file.type;
+    const { userId } = this.state;
+    const fileName = file.name;
+    const access = { level: 'private', contentType: 'text/plain' };
     const fileData = await fetch(file.uri);
     const blobData = await fileData.blob();
 
     try {
-      let putresponse = await Storage.put(fileName, blobData, access);
-      console.log('S3 response: ', putresponse);
+      // const res = await Storage.put(`${userId}/${fileName}`, blobData, access);
+      const res = await Storage.put(fileName, blobData, access);
+      console.log('User ID: ', userId);
+      console.log('S3 response: ', res);
       //_addFileToUser();
     } catch (err) {
       console.log('error: ', err);
@@ -74,16 +76,11 @@ class MetaContract extends React.Component {
   };
 
   onPressUpload = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
-      });
-      if (res.type === 'success') this._parseFile(res);
-    } catch (err) {
-      if (!DocumentPicker.isCancel(err)) {
-        throw err;
-      }
-    }
+    DocumentPicker.pick({
+      type: [DocumentPicker.types.images],
+    })
+      .then(res => this._parseFile(res))
+      .catch(err => console.log('Error: ', err));
   };
 
   onSignOut = () => {

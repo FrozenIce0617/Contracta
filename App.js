@@ -20,8 +20,8 @@ Amplify.configure({
   Analytics: {
     disabled: false,
     AWSPinpoint: {
-      appId: awsConfig.aws_amplify_pinpoint_app_id,
-      region: awsConfig.aws_amplify_pinpoint_region,
+      appId: awsConfig.aws_mobile_analytics_app_id,
+      region: awsConfig.aws_mobile_analytics_app_region,
     },
   },
 });
