@@ -200,7 +200,7 @@ class MetaContract extends React.Component {
           contract=""
         />
         <View style={styles.email}>
-          <Text style={styles.navy}>
+          <Text style={styles.navy} selectable="True">
             Your contracta email: {userInfo.contractaemail}
           </Text>
         </View>
