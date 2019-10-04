@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Modal,
+  Alert,
 } from 'react-native';
 import { compose, graphql, withApollo, Mutation } from 'react-apollo';
 import { Auth, Analytics, Storage } from 'aws-amplify';
@@ -89,8 +90,10 @@ class MetaContract extends React.Component {
           },
           fetchPolicy: 'no-cache',
         })
-        .then(res => console.log('CreateFile Mutation Success: ', res))
-        .catch(err => console.log(err));
+        .then(res =>
+          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]),
+        )
+        .catch(err => Alert.alert('Fail', 'Upload failed', [{ text: 'OK' }]));
     } catch (err) {
       console.log('error: ', err);
     }
