@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from 'axios';
+import qs from 'qs';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -29,6 +32,8 @@ class MetaContract extends React.Component {
   state = {
     userId: '',
     showModal: '',
+    fileProcessing: false,
+    fileProcessingResp:''
   };
 
   componentWillMount() {
@@ -40,6 +45,31 @@ class MetaContract extends React.Component {
   onPressDetails = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractDetail', { item });
+  };
+
+  onPressProcessFile = async item => {
+    const { navigation } = this.props;
+    console.log("Process called for item: ",item);
+    this.setState({
+      fileProcessing: true
+     });
+    const foo = {
+      'document_uri': 's3://'+item.folder+item.filename,
+      'disable_ocr': 'true'
+    }
+    await axios.get('https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv', {
+    headers: { 'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF' },
+    data: JSON.stringify(foo),
+    })
+    .then((resp) => {
+      this.response = resp.data;
+      console.log(resp.data);
+      console.log(resp.status);
+    }).catch((err) => {
+      this.error = err.message;
+      console.log("axios err ", err)
+    });
+    
   };
 
   _parseFile = async file => {
@@ -217,13 +247,14 @@ class MetaContract extends React.Component {
             <View>
               {Object.keys(contract).length !== 0 ? (
                 <View style={styles.contractContainer}>
+                  {console.log("Analysing unprocessed via: ", contract)}
                   {contract.map(item =>
                     item.userowner.files.items.map((unprocessedFile, index) => {
                       if (unprocessedFile.filestate !== 0) return;
                       return (
                         <TouchableOpacity
                           key={index}
-                          // onPress={() => this.onPressDetails(item)}
+                           onPress={() => this.onPressProcessFile(unprocessedFile)}
                         >
                           <View style={styles.contractItem}>
                             <View style={[styles.preview, styles.center]}>
