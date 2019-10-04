@@ -14,6 +14,7 @@ import { Auth, Analytics, Storage } from 'aws-amplify';
 import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import uuidv4 from 'uuid/v4';
 
 import {
   MetaContractList,
@@ -25,6 +26,7 @@ import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
 import styles from './styles';
+import gql from 'graphql-tag';
 
 class MetaContract extends React.Component {
   constructor(props) {
@@ -32,15 +34,15 @@ class MetaContract extends React.Component {
 
     this.state = {
       userId: '',
+      userName: '',
       showModal: '',
     };
-
-    this.client = props.client;
   }
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
-      this.setState({ userId: res.id });
+      console.log('Res: ', res);
+      this.setState({ userId: res.id, userName: res.username });
     });
   }
 
@@ -58,7 +60,8 @@ class MetaContract extends React.Component {
   };
 
   _parseFile = async file => {
-    const { userId } = this.state;
+    const { client } = this.props;
+    const { userId, userName } = this.state;
     const fileName = file.name;
     const access = { level: 'private', contentType: 'text/plain' };
     const fileData = await fetch(file.uri);
@@ -69,7 +72,25 @@ class MetaContract extends React.Component {
       const res = await Storage.put(fileName, blobData, access);
       console.log('User ID: ', userId);
       console.log('S3 response: ', res);
-      //_addFileToUser();
+      const mutResult = client
+        .mutate({
+          mutation: CreateFile,
+          variables: {
+            input: {
+              id: uuidv4(),
+              friendlyname: fileName,
+              filename: fileName,
+              filestate: 0,
+              source: fileName,
+              folder: userId,
+              fileFileownerId: userName,
+              access: userName,
+            },
+          },
+          fetchPolicy: 'no-cache',
+        })
+        .then(res => console.log('CreateFile Mutation Success: ', res))
+        .catch(err => console.log(err));
     } catch (err) {
       console.log('error: ', err);
     }
