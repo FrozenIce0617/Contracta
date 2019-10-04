@@ -65,6 +65,7 @@ class MetaContract extends React.Component {
       this.response = resp.data;
       console.log(resp.data);
       console.log(resp.status);
+      //todo: If success, then trigger Meta Contract Creation, Contract creation and change file state to 1 (i.e Processed)
     }).catch((err) => {
       this.error = err.message;
       console.log("axios err ", err)
