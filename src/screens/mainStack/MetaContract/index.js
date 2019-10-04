@@ -98,7 +98,7 @@ class MetaContract extends React.Component {
 
   onPressUpload = async () => {
     DocumentPicker.pick({
-      type: [DocumentPicker.types.images],
+      type: [DocumentPicker.types.allFiles],
     })
       .then(res => this._parseFile(res))
       .catch(err => console.log('Error: ', err));
