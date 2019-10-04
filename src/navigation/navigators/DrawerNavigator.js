@@ -53,7 +53,7 @@ class DrawerComponent extends React.Component {
             size={120}
             source={{
               uri:
-                'https://media.licdn.com/dms/image/C5603AQFyP0hSigsLNw/profile-displayphoto-shrink_200_200/0?e=1574899200&v=beta&t=AlM0djBDMmhtsVs5qdUliUmEbQJq-ZwGN_3eMFHwk_o',
+                'https://www.digitalelement.com/wp-content/uploads/2016/07/Shake-On-It-32049935-DE-Blog-440x293.jpg',
             }}
             containerStyle={styles.avatar}
           />
