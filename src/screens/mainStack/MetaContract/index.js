@@ -8,69 +8,103 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Modal,
+  Alert,
 } from 'react-native';
-import { compose, graphql, Mutation } from 'react-apollo';
-import { Auth } from 'aws-amplify';
+import { compose, graphql, withApollo, Mutation } from 'react-apollo';
+import { Auth, Analytics, Storage } from 'aws-amplify';
 import { Card, Divider, Button } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import uuidv4 from 'uuid/v4';
 
 import {
   MetaContractList,
   GetUser,
   UpdateTC,
+  CreateFile,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
 import styles from './styles';
+import gql from 'graphql-tag';
 
 class MetaContract extends React.Component {
-  state = {
-    userId: '',
-    showModal: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userId: '',
+      userName: '',
+      showModal: '',
+    };
+  }
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
-      this.setState({ userId: res.id });
+      console.log('Res: ', res);
+      this.setState({ userId: res.id, userName: res.username });
     });
   }
 
   onPressDetails = item => {
     const { navigation } = this.props;
-    navigation.navigate('ContractDetail', { item });
+    const { userId } = this.state;
+
+    navigation.navigate('ContractDetail', { item, userId });
+    Analytics.record({
+      name: 'Contract Detail Visit',
+      attributes: { id: userId },
+    })
+      .then(res => console.log('Analytics Success: ', res))
+      .catch(err => console.log('Analytics Error: ', err));
   };
 
   _parseFile = async file => {
-    const fileName = file.uri.replace(/^.*[\\\/]/, '');
-    const fileType = mime.lookup(file.uri);
+    const { client } = this.props;
+    const { userId, userName } = this.state;
+    const fileName = file.name;
     const access = { level: 'private', contentType: 'text/plain' };
     const fileData = await fetch(file.uri);
     const blobData = await fileData.blob();
 
     try {
-      let putresponse = await Storage.put(fileName, blobData, access);
-      console.log('S3 response: ', putresponse);
-      //_addFileToUser();
+      // const res = await Storage.put(`${userId}/${fileName}`, blobData, access);
+      const res = await Storage.put(fileName, blobData, access);
+      console.log('User ID: ', userId);
+      console.log('S3 response: ', res);
+      const mutResult = client
+        .mutate({
+          mutation: CreateFile,
+          variables: {
+            input: {
+              id: uuidv4(),
+              friendlyname: fileName,
+              filename: fileName,
+              filestate: 0,
+              source: fileName,
+              folder: userId,
+              fileFileownerId: userName,
+              access: userName,
+            },
+          },
+          fetchPolicy: 'no-cache',
+        })
+        .then(res =>
+          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]),
+        )
+        .catch(err => Alert.alert('Fail', 'Upload failed', [{ text: 'OK' }]));
     } catch (err) {
       console.log('error: ', err);
     }
   };
 
   onPressUpload = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.plainText, DocumentPicker.types.pdf],
-      });
-      if (res.type === 'success') this._parseFile(res);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled
-      } else {
-        throw err;
-      }
-    }
+    DocumentPicker.pick({
+      type: [DocumentPicker.types.allFiles],
+    })
+      .then(res => this._parseFile(res))
+      .catch(err => console.log('Error: ', err));
   };
 
   onSignOut = () => {
@@ -166,7 +200,7 @@ class MetaContract extends React.Component {
           contract=""
         />
         <View style={styles.email}>
-          <Text style={styles.navy}>
+          <Text style={styles.navy} selectable="True">
             Your contracta email: {userInfo.contractaemail}
           </Text>
         </View>
@@ -286,6 +320,6 @@ const MetaContractWithData = compose(
       userInfo: props.data.getUser ? props.data.getUser : {},
     }),
   }),
-)(MetaContract);
+)(withApollo(MetaContract));
 
 export default MetaContractWithData;

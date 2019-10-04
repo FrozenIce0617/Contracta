@@ -359,3 +359,20 @@ export const UpdateTC = gql`
     }
   }
 `;
+
+export const CreateFile = gql`
+  mutation CreateFile($input: CreateFileInput!) {
+    createFile(input: $input) {
+      id
+      filename
+      folder
+      source
+      friendlyname
+      access
+      filestate
+      fileowner {
+        id
+      }
+    }
+  }
+`;
