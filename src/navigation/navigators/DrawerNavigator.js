@@ -53,7 +53,7 @@ class DrawerComponent extends React.Component {
             size={120}
             source={{
               uri:
-                'https://www.digitalelement.com/wp-content/uploads/2016/07/Shake-On-It-32049935-DE-Blog-440x293.jpg',
+                'https://contractapublicv1.s3-eu-west-1.amazonaws.com/blank-profile-picture.png',
             }}
             containerStyle={styles.avatar}
           />
@@ -109,7 +109,7 @@ const AppDrawerNavigator = createDrawerNavigator(
         ),
       },
     },
-    [drawerTitles.TimelineModule]: {
+    /*[drawerTitles.TimelineModule]: {
       screen: TimeLineModuleScreen,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
@@ -120,7 +120,7 @@ const AppDrawerNavigator = createDrawerNavigator(
           />
         ),
       },
-    },
+    },*/
     [drawerTitles.Feedback]: {
       screen: FeedbackScreen,
       navigationOptions: {
