@@ -376,3 +376,23 @@ export const CreateFile = gql`
     }
   }
 `;
+
+export const CreateMetaContract = gql`
+  mutation CreateMetaContract($input: CreateMetaContractInput!) {
+  createMetaContract(input: $input) {
+      id
+      name
+      description
+      url
+      date
+      lang
+      arn
+      state
+      access
+      docbot
+      userowner {
+        id
+      }
+    }
+  }
+`;
