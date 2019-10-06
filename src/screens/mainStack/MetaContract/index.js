@@ -27,7 +27,6 @@ import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 
 import styles from './styles';
-import gql from 'graphql-tag';
 
 class MetaContract extends React.Component {
   constructor(props) {
@@ -90,9 +89,15 @@ class MetaContract extends React.Component {
           },
           fetchPolicy: 'no-cache',
         })
-        .then(res =>
-          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]),
-        )
+        .then(() => {
+          Analytics.record({
+            name: 'File Upload',
+            attributes: { id: userId },
+          })
+            .then(res => console.log('Analytics Success: ', res))
+            .catch(err => console.log('Analytics Error: ', err));
+          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]);
+        })
         .catch(err => Alert.alert('Fail', 'Upload failed', [{ text: 'OK' }]));
     } catch (err) {
       console.log('error: ', err);
@@ -224,13 +229,15 @@ class MetaContract extends React.Component {
                       onPress={() => this.onPressDetails(item)}
                     >
                       <View style={styles.contractItem}>
-                        <View style={[styles.preview, styles.center]}>
+                        <View style={[styles.center, styles.preview]}>
                           <Image
                             source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
                             style={styles.previewIcon}
                           />
                         </View>
-                        <Text style={{ textAlign: 'center' }}>{item.name}</Text>
+                        <Text numberOfLines={2} style={styles.contractTitle}>
+                          {item.name}
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   ))}
@@ -260,7 +267,7 @@ class MetaContract extends React.Component {
                           // onPress={() => this.onPressDetails(item)}
                         >
                           <View style={styles.contractItem}>
-                            <View style={[styles.preview, styles.center]}>
+                            <View style={[styles.center, styles.preview]}>
                               <Image
                                 source={{
                                   uri: 'https://imgur.com/Tq8xJsD.png',
@@ -268,7 +275,10 @@ class MetaContract extends React.Component {
                                 style={styles.previewIcon}
                               />
                             </View>
-                            <Text style={{ textAlign: 'center' }}>
+                            <Text
+                              numberOfLines={2}
+                              style={styles.contractTitle}
+                            >
                               {unprocessedFile.filename}
                             </Text>
                           </View>
