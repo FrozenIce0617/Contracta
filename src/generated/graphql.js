@@ -376,3 +376,39 @@ export const CreateFile = gql`
     }
   }
 `;
+
+export const CreateFeedback = gql`
+  mutation CreateFeedback($input: CreateFeedbackInput!) {
+    createFeedback(input: $input) {
+      id
+      like
+      notlike
+      add
+      userowner {
+        id
+        firstname
+        lastname
+        useremail
+        s3folder
+        files {
+          nextToken
+        }
+        contractaemail
+        isTermsAndPrivacyAgreed
+        ownedmetacontracts {
+          nextToken
+        }
+        feedbackgiven {
+          nextToken
+        }
+      }
+      response {
+        items {
+          id
+          resp
+        }
+        nextToken
+      }
+    }
+  }
+`;
