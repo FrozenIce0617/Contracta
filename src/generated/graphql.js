@@ -396,3 +396,17 @@ export const CreateMetaContract = gql`
     }
   }
 `;
+
+export const CreateFeedback = gql`
+  mutation CreateFeedback($input: CreateFeedbackInput!) {
+    createFeedback(input: $input) {
+      id
+      like
+      notlike
+      add
+      userowner {
+        id
+      }
+    }
+  }
+`;
