@@ -19,13 +19,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   contractItem: {
+    flex: 1,
     flexDirection: 'column',
     width: scalingUtils.scale(85),
     height: scalingUtils.verticalScale(180),
     margin: scalingUtils.scale(15),
+    marginBottom: scalingUtils.scale(50),
   },
   preview: {
-    height: scalingUtils.verticalScale(120),
+    flex: 3,
+    height: scalingUtils.verticalScale(150),
   },
   email: {
     margin: scalingUtils.scale(15),
@@ -46,10 +49,16 @@ const styles = StyleSheet.create({
     width: scalingUtils.scale(80),
     height: scalingUtils.scale(80),
   },
+  contractTitle: {
+    flex: 1,
+    textAlign: 'center',
+    flexGrow: 1,
+    flexShrink: 1,
+  },
   category: {
     margin: scalingUtils.verticalScale(10),
     marginLeft: scalingUtils.scale(20),
-    marginTop: scalingUtils.verticalScale(20),
+    marginTop: scalingUtils.verticalScale(10),
     marginBottom: 0,
     fontSize: scalingUtils.verticalScale(20),
     color: colors.navy,

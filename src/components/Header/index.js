@@ -11,12 +11,10 @@ class Header extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.avatar}>
-          <UserAvatar size="40" name="Jane Doe" color="#fff" textColor="#000" />
+          <UserAvatar size="40" name={name} color="#fff" textColor="#000" />
         </View>
         <View style={styles.content}>
-          <Text style={styles.text}>
-            Hi {name}, welcome to Contracta
-          </Text>
+          <Text style={styles.text}>Hi {name}, welcome to Contracta</Text>
         </View>
       </View>
     );

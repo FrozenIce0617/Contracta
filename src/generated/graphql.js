@@ -379,7 +379,7 @@ export const CreateFile = gql`
 
 export const CreateMetaContract = gql`
   mutation CreateMetaContract($input: CreateMetaContractInput!) {
-  createMetaContract(input: $input) {
+    createMetaContract(input: $input) {
       id
       name
       description

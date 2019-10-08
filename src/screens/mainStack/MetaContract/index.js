@@ -24,15 +24,13 @@ import {
   GetUser,
   UpdateTC,
   CreateFile,
-  CreateMetaContract
+  CreateMetaContract,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
 import styles from './styles';
 
-
 class MetaContract extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -40,10 +38,9 @@ class MetaContract extends React.Component {
       userId: '',
       userName: '',
       showModal: '',
-      myMetaContractId: ''
+      myMetaContractId: '',
     };
   }
-
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
@@ -68,7 +65,6 @@ class MetaContract extends React.Component {
   _onPressProcessFile = async item => {
     const { client } = this.props;
     const { userId, userName } = this.state;
-    
 
     try {
       console.log('User ID while processing file: ', userId);
@@ -81,63 +77,74 @@ class MetaContract extends React.Component {
           variables: {
             input: {
               id: uuidv4(),
-              name:item.filename,
-              description:'Automated file processing for '+item.filename,
-              url:'s3://'+item.folder+item.filename,
-              date:isodate.split('T')[0],
-              lang:'en',
-              arn:'NA',
-              state:"init",
-              access:userName,
-              docbot:'NA',
-              metaContractUserownerId:userName
+              name: item.filename,
+              description: 'Automated file processing for ' + item.filename,
+              url: 's3://' + item.folder + item.filename,
+              date: isodate.split('T')[0],
+              lang: 'en',
+              arn: 'NA',
+              state: 'init',
+              access: userName,
+              docbot: 'NA',
+              metaContractUserownerId: userName,
             },
           },
           fetchPolicy: 'no-cache',
         })
-        .then(function(res){
-            console.log("Mutation results res ",res);
-            console.log("Passing on REST API for MC id ",res.data.createMetaContract.id);
-            metaId= res.data.createMetaContract.id ;
-            Alert.alert('Success', 'Successfully created Meta Contract and Processed File', [{ text: 'OK' }]); 
-            //File unprocessed to processed state to 1 cannot be done here. Do it from backend.
+        .then(function(res) {
+          console.log('Mutation results res ', res);
+          console.log(
+            'Passing on REST API for MC id ',
+            res.data.createMetaContract.id,
+          );
+          metaId = res.data.createMetaContract.id;
+          Alert.alert(
+            'Success',
+            'Successfully created Meta Contract and Processed File',
+            [{ text: 'OK' }],
+          );
+          //File unprocessed to processed state to 1 cannot be done here. Do it from backend.
+        })
+        .catch(function(err) {
+          console.log('Mutation unsuccessful err ', err);
+          Alert.alert('Fail', 'Unprocessed file creation failed', [
+            { text: 'OK' },
+          ]);
+        });
 
-        }
+      //Now Call the REST API to create contract and fill body text
+      const foo = {
+        document_uri: 's3://' + item.folder + item.filename,
+        disable_ocr: 'true',
+        metaContractID: metaId,
+        contractOwner: userName,
+        userJWT: '',
+        fileStateToChange: item.id,
+      };
+
+      console.log('passing following params to REST ', foo);
+      await axios
+        .get(
+          'https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv',
+          {
+            headers: {
+              'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF',
+            },
+            data: JSON.stringify(foo),
+          },
         )
-        .catch(function(err){
-          console.log("Mutation unsuccessful err ",err)
-          Alert.alert('Fail', 'Unprocessed file creation failed', [{ text: 'OK' }]);  
-        })
-         
-        
-        //Now Call the REST API to create contract and fill body text
-        const foo = {
-          'document_uri': 's3://'+item.folder+item.filename,
-          'disable_ocr': 'true',
-          'metaContractID':metaId,
-          'contractOwner':userName,
-          'userJWT':'',
-          'fileStateToChange':item.id
-        }
-
-        console.log("passing following params to REST ", foo);
-        await axios.get('https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv', {
-        headers: { 'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF' },
-        data: JSON.stringify(foo),
-        })
-        .then((resp) => {
+        .then(resp => {
           this.response = resp.data;
           console.log(resp.data);
           console.log(resp.status);
-        }).catch((err) => {
+        })
+        .catch(err => {
           this.error = err.message;
-          console.log("axios err ", err)
+          console.log('axios err ', err);
         });
-          
     } catch (err) {
       console.log('error: ', err);
     }
-    
   };
 
   _parseFile = async file => {
@@ -170,9 +177,15 @@ class MetaContract extends React.Component {
           },
           fetchPolicy: 'no-cache',
         })
-        .then(res =>
-          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]),
-        )
+        .then(() => {
+          Analytics.record({
+            name: 'File Upload',
+            attributes: { id: userId },
+          })
+            .then(res => console.log('Analytics Success: ', res))
+            .catch(err => console.log('Analytics Error: ', err));
+          Alert.alert('Success', 'Successfully uploaded', [{ text: 'OK' }]);
+        })
         .catch(err => Alert.alert('Fail', 'Upload failed', [{ text: 'OK' }]));
     } catch (err) {
       console.log('error: ', err);
@@ -304,13 +317,15 @@ class MetaContract extends React.Component {
                       onPress={() => this.onPressDetails(item)}
                     >
                       <View style={styles.contractItem}>
-                        <View style={[styles.preview, styles.center]}>
+                        <View style={[styles.center, styles.preview]}>
                           <Image
                             source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
                             style={styles.previewIcon}
                           />
                         </View>
-                        <Text style={{ textAlign: 'center' }}>{item.name}</Text>
+                        <Text numberOfLines={2} style={styles.contractTitle}>
+                          {item.name}
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   ))}
@@ -331,17 +346,19 @@ class MetaContract extends React.Component {
             <View>
               {Object.keys(contract).length !== 0 ? (
                 <View style={styles.contractContainer}>
-                  {console.log("Analysing unprocessed via: ", contract)}
+                  {console.log('Analysing unprocessed via: ', contract)}
                   {contract.map(item =>
                     item.userowner.files.items.map((unprocessedFile, index) => {
                       if (unprocessedFile.filestate !== 0) return;
                       return (
                         <TouchableOpacity
                           key={index}
-                           onPress={() => this._onPressProcessFile(unprocessedFile)}
+                          onPress={() =>
+                            this._onPressProcessFile(unprocessedFile)
+                          }
                         >
                           <View style={styles.contractItem}>
-                            <View style={[styles.preview, styles.center]}>
+                            <View style={[styles.center, styles.preview]}>
                               <Image
                                 source={{
                                   uri: 'https://imgur.com/Tq8xJsD.png',
@@ -349,7 +366,10 @@ class MetaContract extends React.Component {
                                 style={styles.previewIcon}
                               />
                             </View>
-                            <Text style={{ textAlign: 'center' }}>
+                            <Text
+                              numberOfLines={2}
+                              style={styles.contractTitle}
+                            >
                               {unprocessedFile.filename}
                             </Text>
                           </View>
