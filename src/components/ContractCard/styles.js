@@ -4,8 +4,8 @@ import { scalingUtils, colors } from '../../styles';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    margin: scalingUtils.scale(15),
-    padding: scalingUtils.scale(20),
+    margin: scalingUtils.scale(5),
+    padding: scalingUtils.scale(5),
     paddingTop: scalingUtils.verticalScale(5),
     backgroundColor: colors.white,
     borderWidth: scalingUtils.scale(0.5),
@@ -54,22 +54,22 @@ const styles = StyleSheet.create({
   },
   section: {
     flexDirection: 'row',
-    width: scalingUtils.scale(80),
+    width: scalingUtils.scale(40),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: scalingUtils.verticalScale(10),
-    marginBottom: scalingUtils.verticalScale(10),
+    marginBottom: scalingUtils.verticalScale(5),
   },
   icon: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: scalingUtils.scale(40),
+    width: scalingUtils.scale(20),
   },
   count: {
     marginLeft: scalingUtils.scale(5),
-    fontSize: scalingUtils.verticalScale(16),
+    fontSize: scalingUtils.verticalScale(12),
     color: colors.black,
   },
   right: {
