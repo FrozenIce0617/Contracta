@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
-
 import {
   SafeAreaView,
   ScrollView,
@@ -29,9 +28,8 @@ import {
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
-
 import styles from './styles';
-import gql from 'graphql-tag';
+
 
 class MetaContract extends React.Component {
 
@@ -44,9 +42,6 @@ class MetaContract extends React.Component {
       showModal: '',
       myMetaContractId: ''
     };
-
-    this._onPressProcessFile = this._onPressProcessFile.bind(this);
-
   }
 
 
