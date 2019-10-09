@@ -196,6 +196,53 @@ export const GetUser = gql`
   }
 `;
 
+export const UpdateUser = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+      firstname
+      lastname
+      useremail
+      s3folder
+      files {
+        items {
+          id
+          filename
+          folder
+          source
+          filestate
+        }
+        nextToken
+      }
+      contractaemail
+      isTermsAndPrivacyAgreed
+      ownedmetacontracts {
+        items {
+          id
+          name
+          description
+          url
+          date
+          arn
+          state
+          access
+          docbot
+        }
+        nextToken
+      }
+      feedbackgiven {
+        items {
+          id
+          like
+          notlike
+          add
+        }
+        nextToken
+      }
+    }
+  }
+`;
+
 export const BodyListDocument = gql`
   query bodyList {
     listBodys {
@@ -299,53 +346,6 @@ export const MetaContractList = gql`
   }
 `;
 
-export const UpdateUser = gql`
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      id
-      firstname
-      lastname
-      useremail
-      s3folder
-      files {
-        items {
-          id
-          filename
-          folder
-          source
-          filestate
-        }
-        nextToken
-      }
-      contractaemail
-      isTermsAndPrivacyAgreed
-      ownedmetacontracts {
-        items {
-          id
-          name
-          description
-          url
-          date
-          arn
-          state
-          access
-          docbot
-        }
-        nextToken
-      }
-      feedbackgiven {
-        items {
-          id
-          like
-          notlike
-          add
-        }
-        nextToken
-      }
-    }
-  }
-`;
-
 export const UpdateTC = gql`
   mutation UpdateUser($input: UpdateUserInput!) {
     updateUser(input: $input) {
@@ -372,6 +372,29 @@ export const CreateFile = gql`
       filestate
       fileowner {
         id
+      }
+    }
+  }
+`;
+
+export const ListFiles = gql`
+  query ListFiles(
+    $filter: ModelFileFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listFiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        filename
+        folder
+        source
+        friendlyname
+        access
+        filestate
+        fileowner {
+          id
+        }
       }
     }
   }
