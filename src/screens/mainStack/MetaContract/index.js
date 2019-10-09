@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import qs from 'qs';
 import {
   SafeAreaView,
   ScrollView,
@@ -25,6 +24,7 @@ import {
   UpdateTC,
   CreateFile,
   CreateMetaContract,
+  ListFiles,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
@@ -208,7 +208,7 @@ class MetaContract extends React.Component {
   };
 
   render() {
-    const { contract, userInfo, loading } = this.props;
+    const { contract, userInfo, files, loading } = this.props;
     const { showModal } = this.state;
     const isVisible =
       showModal === '' ? !userInfo.isTermsAndPrivacyAgreed : showModal;
@@ -347,36 +347,31 @@ class MetaContract extends React.Component {
               {Object.keys(contract).length !== 0 ? (
                 <View style={styles.contractContainer}>
                   {console.log('Analysing unprocessed via: ', contract)}
-                  {contract.map(item =>
-                    item.userowner.files.items.map((unprocessedFile, index) => {
-                      if (unprocessedFile.filestate !== 0) return;
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() =>
-                            this._onPressProcessFile(unprocessedFile)
-                          }
-                        >
-                          <View style={styles.contractItem}>
-                            <View style={[styles.center, styles.preview]}>
-                              <Image
-                                source={{
-                                  uri: 'https://imgur.com/Tq8xJsD.png',
-                                }}
-                                style={styles.previewIcon}
-                              />
-                            </View>
-                            <Text
-                              numberOfLines={2}
-                              style={styles.contractTitle}
-                            >
-                              {unprocessedFile.filename}
-                            </Text>
+                  {files.items.map((unprocessedFile, index) => {
+                    if (unprocessedFile.filestate !== 0) return;
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() =>
+                          this._onPressProcessFile(unprocessedFile)
+                        }
+                      >
+                        <View style={styles.contractItem}>
+                          <View style={[styles.center, styles.preview]}>
+                            <Image
+                              source={{
+                                uri: 'https://imgur.com/Tq8xJsD.png',
+                              }}
+                              style={styles.previewIcon}
+                            />
                           </View>
-                        </TouchableOpacity>
-                      );
-                    }),
-                  )}
+                          <Text numberOfLines={2} style={styles.contractTitle}>
+                            {unprocessedFile.filename}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
               ) : (
                 <SafeAreaView>
@@ -396,15 +391,19 @@ class MetaContract extends React.Component {
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
     options: { fetchPolicy: 'network-only', pollInterval: 500 },
-    props: props => {
-      return {
-        contract:
-          props.data.listMetaContracts && props.data.listMetaContracts.items
-            ? props.data.listMetaContracts.items
-            : [],
-        loading: props.data.loading,
-      };
-    },
+    props: props => ({
+      contract:
+        props.data.listMetaContracts && props.data.listMetaContracts.items
+          ? props.data.listMetaContracts.items
+          : [],
+      loading: props.data.loading,
+    }),
+  }),
+  graphql(ListFiles, {
+    options: { fetchPolicy: 'network-only' },
+    props: props => ({
+      files: props.data.listFiles ? props.data.listFiles : [],
+    }),
   }),
   graphql(GetUser, {
     options: props => {
