@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import qs from 'qs';
 import {
   SafeAreaView,
   ScrollView,
@@ -25,6 +24,7 @@ import {
   UpdateTC,
   CreateFile,
   CreateMetaContract,
+  ListFiles,
 } from '../../../generated/graphql';
 import HeaderNavigatorBar from '../../../components/HeaderNavigatorBar';
 import Header from '../../../components/Header';
@@ -62,7 +62,7 @@ class MetaContract extends React.Component {
       .catch(err => console.log('Analytics Error: ', err));
   };
 
-  _onPressProcessFile = async item => {
+  _onPressProcessFile = item => {
     const { client } = this.props;
     const { userId, userName } = this.state;
     var metaId = "";
@@ -80,7 +80,7 @@ class MetaContract extends React.Component {
               id: uuidv4(),
               name: item.filename,
               description: 'Automated file processing for ' + item.filename,
-              url: 's3://' + item.folder + item.filename,
+              url: `https://contracta2s3docs-devv.s3-eu-west-1.amazonaws.com/private/${item.folder}/${item.filename}`,
               date: isodate.split('T')[0],
               lang: 'en',
               arn: 'NA',
@@ -92,7 +92,7 @@ class MetaContract extends React.Component {
           },
           fetchPolicy: 'no-cache',
         })
-        .then(function(res) {
+        .then(async res => {
           console.log('Mutation results res ', res);
           console.log(
             'Passing on REST API for MC id ',
@@ -107,44 +107,42 @@ class MetaContract extends React.Component {
             [{ text: 'OK' }],
           );
           //File unprocessed to processed state to 1 cannot be done here. Do it from backend.
+
+          const foo = {
+            document_uri: 's3://' + item.folder + item.filename,
+            disable_ocr: 'true',
+            metaContractID: metaId,
+            contractOwner: userName,
+            userJWT: '',
+            fileStateToChange: item.id,
+          };
+
+          console.log('passing following params to REST ', foo);
+          await axios
+            .get(
+              'https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv',
+              {
+                headers: {
+                  'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF',
+                },
+                data: JSON.stringify(foo),
+              },
+            )
+            .then(resp => {
+              this.response = resp.data;
+              console.log(resp.data);
+              console.log(resp.status);
+            })
+            .catch(err => {
+              this.error = err.message;
+              console.log('axios err ', err);
+            });
         })
         .catch(function(err) {
           console.log('Mutation unsuccessful err ', err);
           Alert.alert('Fail', 'Unprocessed file creation failed', [
             { text: 'OK' },
           ]);
-        });
-
-      //Now Call the REST API to create contract and fill body text
-      const { myMetaContractId } = this.state;
-      const foo = {
-        document_uri: 's3://' + item.folder + item.filename,
-        disable_ocr: 'true',
-        metaContractID: "98b99b7c-0a63-44d9-a7ca-fa1499a241a3",
-        contractOwner: userName,
-        userJWT: '',
-        fileStateToChange: item.id,
-      };
-
-      console.log('passing following params to REST ', foo);
-      await axios
-        .get(
-          'https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv',
-          {
-            headers: {
-              'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF',
-            },
-            data: JSON.stringify(foo),
-          },
-        )
-        .then(resp => {
-          this.response = resp.data;
-          console.log(resp.data);
-          console.log(resp.status);
-        })
-        .catch(err => {
-          this.error = err.message;
-          console.log('axios err ', err);
         });
     } catch (err) {
       console.log('error: ', err);
@@ -212,7 +210,7 @@ class MetaContract extends React.Component {
   };
 
   render() {
-    const { contract, userInfo, loading } = this.props;
+    const { contract, userInfo, files, loading } = this.props;
     const { showModal } = this.state;
     const isVisible =
       showModal === '' ? !userInfo.isTermsAndPrivacyAgreed : showModal;
@@ -351,36 +349,31 @@ class MetaContract extends React.Component {
               {Object.keys(contract).length !== 0 ? (
                 <View style={styles.contractContainer}>
                   {console.log('Analysing unprocessed via: ', contract)}
-                  {contract.map(item =>
-                    item.userowner.files.items.map((unprocessedFile, index) => {
-                      if (unprocessedFile.filestate !== 0) return;
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() =>
-                            this._onPressProcessFile(unprocessedFile)
-                          }
-                        >
-                          <View style={styles.contractItem}>
-                            <View style={[styles.center, styles.preview]}>
-                              <Image
-                                source={{
-                                  uri: 'https://imgur.com/Tq8xJsD.png',
-                                }}
-                                style={styles.previewIcon}
-                              />
-                            </View>
-                            <Text
-                              numberOfLines={2}
-                              style={styles.contractTitle}
-                            >
-                              {unprocessedFile.filename}
-                            </Text>
+                  {files.items.map((unprocessedFile, index) => {
+                    if (unprocessedFile.filestate !== 0) return;
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() =>
+                          this._onPressProcessFile(unprocessedFile)
+                        }
+                      >
+                        <View style={styles.contractItem}>
+                          <View style={[styles.center, styles.preview]}>
+                            <Image
+                              source={{
+                                uri: 'https://imgur.com/Tq8xJsD.png',
+                              }}
+                              style={styles.previewIcon}
+                            />
                           </View>
-                        </TouchableOpacity>
-                      );
-                    }),
-                  )}
+                          <Text numberOfLines={2} style={styles.contractTitle}>
+                            {unprocessedFile.filename}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
               ) : (
                 <SafeAreaView>
@@ -400,15 +393,19 @@ class MetaContract extends React.Component {
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
     options: { fetchPolicy: 'network-only', pollInterval: 500 },
-    props: props => {
-      return {
-        contract:
-          props.data.listMetaContracts && props.data.listMetaContracts.items
-            ? props.data.listMetaContracts.items
-            : [],
-        loading: props.data.loading,
-      };
-    },
+    props: props => ({
+      contract:
+        props.data.listMetaContracts && props.data.listMetaContracts.items
+          ? props.data.listMetaContracts.items
+          : [],
+      loading: props.data.loading,
+    }),
+  }),
+  graphql(ListFiles, {
+    options: { fetchPolicy: 'network-only' },
+    props: props => ({
+      files: props.data.listFiles ? props.data.listFiles : [],
+    }),
   }),
   graphql(GetUser, {
     options: props => {

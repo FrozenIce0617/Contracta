@@ -122,7 +122,7 @@ const AppDrawerNavigator = createDrawerNavigator(
       },
     },*/
     [drawerTitles.Feedback]: {
-      screen: FeedbackScreen,
+      screen: props => <FeedbackScreen {...props} />,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons
