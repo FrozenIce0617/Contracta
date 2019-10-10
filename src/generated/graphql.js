@@ -99,6 +99,8 @@ export const GetContractDocument = gql`
           title
           rawtext
           seqnr
+          state
+          priority
           intents {
             items {
               id

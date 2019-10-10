@@ -64,7 +64,9 @@ class ContractCard extends React.Component {
               <FontAwesome name="comment-o" size={30} color="#000" />
             </View>
             <Text style={styles.count}>{info.Stats.version}</Text>
-          </View> */}
+
+          </View>
+          */}
           <View style={styles.section}>
             <View style={styles.icon}>
               <TouchableOpacity onPress={onPressStretch}>
