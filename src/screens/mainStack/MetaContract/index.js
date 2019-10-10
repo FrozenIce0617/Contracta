@@ -68,8 +68,8 @@ class MetaContract extends React.Component {
 
     try {
       console.log('User ID while processing file: ', userId);
-      var isodate = new Date().toISOString();
-      var metaId = '';
+      let isodate = new Date().toISOString();
+      let metaId = '';
 
       const mutResult = client
         .mutate({
@@ -98,6 +98,8 @@ class MetaContract extends React.Component {
             res.data.createMetaContract.id,
           );
           metaId = res.data.createMetaContract.id;
+          //Todo: set state is not working in this context. @yuriy pls check
+          //this.setState({ myMetaContractId: metaId });
           Alert.alert(
             'Success',
             'Successfully created Meta Contract and Processed File',
