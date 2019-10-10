@@ -62,7 +62,7 @@ class MetaContract extends React.Component {
       .catch(err => console.log('Analytics Error: ', err));
   };
 
-  _onPressProcessFile = async item => {
+  _onPressProcessFile = item => {
     const { client } = this.props;
     const { userId, userName } = this.state;
 
@@ -79,7 +79,7 @@ class MetaContract extends React.Component {
               id: uuidv4(),
               name: item.filename,
               description: 'Automated file processing for ' + item.filename,
-              url: 's3://' + item.folder + item.filename,
+              url: `https://contracta2s3docs-devv.s3-eu-west-1.amazonaws.com/private/${item.folder}/${item.filename}`,
               date: isodate.split('T')[0],
               lang: 'en',
               arn: 'NA',
@@ -91,7 +91,7 @@ class MetaContract extends React.Component {
           },
           fetchPolicy: 'no-cache',
         })
-        .then(function(res) {
+        .then(async res => {
           console.log('Mutation results res ', res);
           console.log(
             'Passing on REST API for MC id ',
@@ -104,43 +104,42 @@ class MetaContract extends React.Component {
             [{ text: 'OK' }],
           );
           //File unprocessed to processed state to 1 cannot be done here. Do it from backend.
+
+          const foo = {
+            document_uri: 's3://' + item.folder + item.filename,
+            disable_ocr: 'true',
+            metaContractID: metaId,
+            contractOwner: userName,
+            userJWT: '',
+            fileStateToChange: item.id,
+          };
+
+          console.log('passing following params to REST ', foo);
+          await axios
+            .get(
+              'https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv',
+              {
+                headers: {
+                  'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF',
+                },
+                data: JSON.stringify(foo),
+              },
+            )
+            .then(resp => {
+              this.response = resp.data;
+              console.log(resp.data);
+              console.log(resp.status);
+            })
+            .catch(err => {
+              this.error = err.message;
+              console.log('axios err ', err);
+            });
         })
         .catch(function(err) {
           console.log('Mutation unsuccessful err ', err);
           Alert.alert('Fail', 'Unprocessed file creation failed', [
             { text: 'OK' },
           ]);
-        });
-
-      //Now Call the REST API to create contract and fill body text
-      const foo = {
-        document_uri: 's3://' + item.folder + item.filename,
-        disable_ocr: 'true',
-        metaContractID: metaId,
-        contractOwner: userName,
-        userJWT: '',
-        fileStateToChange: item.id,
-      };
-
-      console.log('passing following params to REST ', foo);
-      await axios
-        .get(
-          'https://hmrhmw0c65.execute-api.eu-west-1.amazonaws.com/dev/S3Trigger749b1d51-devv',
-          {
-            headers: {
-              'x-api-key': 'UG2Qm9uV3h38xoPY0UsA6854ofnmHOyw9sL6xuSF',
-            },
-            data: JSON.stringify(foo),
-          },
-        )
-        .then(resp => {
-          this.response = resp.data;
-          console.log(resp.data);
-          console.log(resp.status);
-        })
-        .catch(err => {
-          this.error = err.message;
-          console.log('axios err ', err);
         });
     } catch (err) {
       console.log('error: ', err);
