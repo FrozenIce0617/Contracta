@@ -79,7 +79,7 @@ class MetaContract extends React.Component {
               id: uuidv4(),
               name: item.filename,
               description: 'Automated file processing for ' + item.filename,
-              url: `https://contracta2s3docs-devv.s3-eu-west-1.amazonaws.com/private/${item.folder}/${item.filename}`,
+              url: `s3://${item.folder}${item.filename}`,
               date: isodate.split('T')[0],
               lang: 'en',
               arn: 'NA',

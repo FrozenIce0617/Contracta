@@ -93,7 +93,7 @@ export const GetContractDocument = gql`
         version
       }
       state
-      bodytext {
+      bodytext (limit:120){
         items {
           id
           title
