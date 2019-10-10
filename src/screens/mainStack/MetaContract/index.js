@@ -65,12 +65,11 @@ class MetaContract extends React.Component {
   _onPressProcessFile = item => {
     const { client } = this.props;
     const { userId, userName } = this.state;
-    var metaId = "";
 
     try {
       console.log('User ID while processing file: ', userId);
-      var isodate = new Date().toISOString();
-      
+      let isodate = new Date().toISOString();
+      let metaId = '';
 
       const mutResult = client
         .mutate({
