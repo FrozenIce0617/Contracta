@@ -93,7 +93,7 @@ export const GetContractDocument = gql`
         version
       }
       state
-      bodytext (limit:120){
+      bodytext(limit: 120) {
         items {
           id
           title
@@ -431,6 +431,30 @@ export const CreateFeedback = gql`
       add
       userowner {
         id
+      }
+    }
+  }
+`;
+
+export const ListFactSets = gql`
+  query listFs {
+    listFactSets {
+      items {
+        id
+        factsetname
+        factsetdomain
+        contract {
+          id
+        }
+        fact {
+          items {
+            id
+            factname
+            factfriendlyvalue
+            isEnabled
+            factjson
+          }
+        }
       }
     }
   }

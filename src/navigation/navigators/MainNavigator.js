@@ -12,6 +12,7 @@ import ContractCommentScreen from '../../screens/mainStack/ContractComment';
 import ProfileScreen from '../../screens/mainStack/Profile';
 import EditProfileScreen from '../../screens/mainStack/EditProfile';
 import FeedbackScreen from '../../screens/mainStack/Feedback';
+import FactSetScreen from '../../screens/mainStack/FactSet';
 
 const MainNavigator = createStackNavigator(
   {
@@ -27,6 +28,7 @@ const MainNavigator = createStackNavigator(
     Profile: { screen: ProfileScreen },
     EditProfile: { screen: EditProfileScreen },
     Feedback: { screen: FeedbackScreen },
+    FactSet: { screen: FactSetScreen },
   },
   {
     initialRouteName: 'Loading',
