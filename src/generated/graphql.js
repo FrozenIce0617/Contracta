@@ -206,41 +206,8 @@ export const UpdateUser = gql`
       lastname
       useremail
       s3folder
-      files {
-        items {
-          id
-          filename
-          folder
-          source
-          filestate
-        }
-        nextToken
-      }
       contractaemail
       isTermsAndPrivacyAgreed
-      ownedmetacontracts {
-        items {
-          id
-          name
-          description
-          url
-          date
-          arn
-          state
-          access
-          docbot
-        }
-        nextToken
-      }
-      feedbackgiven {
-        items {
-          id
-          like
-          notlike
-          add
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -318,25 +285,6 @@ export const MetaContractList = gql`
         id
         name
         description
-        userowner {
-          id
-          firstname
-          lastname
-          useremail
-          s3folder
-          contractaemail
-          isTermsAndPrivacyAgreed
-          files {
-            items {
-              id
-              filename
-              folder
-              source
-              filestate
-            }
-            nextToken
-          }
-        }
         contracts {
           items {
             id
