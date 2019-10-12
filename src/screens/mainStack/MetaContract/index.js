@@ -345,9 +345,9 @@ class MetaContract extends React.Component {
           <Text style={styles.category}>Unprocessed Contracts</Text>
           <ScrollView horizontal>
             <View>
-              {Object.keys(contract).length !== 0 ? (
+              {Object.keys(files).length !== 0 ? (
                 <View style={styles.contractContainer}>
-                  {console.log('Analysing unprocessed via: ', contract)}
+                  {console.log('Analysing unprocessed via: ', files)}
                   {files.items.map((unprocessedFile, index) => {
                     if (unprocessedFile.filestate !== 0) return;
                     return (
