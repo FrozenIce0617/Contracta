@@ -437,24 +437,38 @@ export const CreateFeedback = gql`
 `;
 
 export const ListFactSets = gql`
-  query listFs {
-    listFactSets {
-      items {
+  query getCo($id: ID!) {
+    getContract(id: $id) {
+      id
+      name
+      description
+      factset {
         id
         factsetname
-        factsetdomain
-        contract {
-          id
-        }
         fact {
           items {
             id
             factname
             factfriendlyvalue
-            isEnabled
             factjson
           }
         }
+      }
+    }
+  }
+`;
+
+export const CreateFactObj = gql`
+  mutation CreateFactObj($input: CreateFactObjInput!) {
+    createFactObj(input: $input) {
+      id
+      factname
+      derivedfrom
+      factfriendlyvalue
+      factjson
+      isEnabled
+      fs {
+        id
       }
     }
   }
