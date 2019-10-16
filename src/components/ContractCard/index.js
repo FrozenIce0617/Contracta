@@ -41,11 +41,11 @@ class ContractCard extends React.Component {
         <View>
           <Text style={styles.textCategory}>Content:</Text>
         </View> */}
-        <View style={styles.borderBottom}>
+        <View style={styles.rawText}>
           <Text>{info.rawtext}</Text>
         </View>
 
-        <View style={[styles.row, styles.spaceBetween]}>
+        <View style={[styles.row, styles.flexEnd]}>
           {/*
           <View style={styles.section}>
             <View style={styles.icon}>

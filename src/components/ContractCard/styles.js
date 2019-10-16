@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
+  flexEnd: {
+    justifyContent: 'flex-end',
+  },
   category: {
     display: 'flex',
     justifyContent: 'center',
@@ -37,10 +40,10 @@ const styles = StyleSheet.create({
   prioText: {
     color: colors.navy,
   },
-  borderBottom: {
+  rawText: {
+    padding: scalingUtils.verticalScale(10),
     borderBottomWidth: scalingUtils.verticalScale(0.5),
     borderColor: colors.navy,
-    paddingBottom: scalingUtils.verticalScale(10),
   },
   textCategory: {
     // fontSize: scalingUtils.verticalScale(15),
