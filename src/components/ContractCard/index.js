@@ -11,9 +11,16 @@ import { colors } from '../../styles';
 class ContractCard extends React.Component {
   render() {
     const { intentOptions, priorityOptions, info, onPressStretch } = this.props;
+    console.log('Info : ', info.priority);
+    const borderColor =
+      info.priority === 'HIGH'
+        ? '#333'
+        : info.priority === 'MED'
+        ? '#888'
+        : '#ddd';
 
     return (
-      <View style={styles.container}>
+      <View style={{ ...styles.container, borderColor }}>
         {/* <View style={styles.row}>
           <View style={styles.row}>
             <View style={styles.category}>

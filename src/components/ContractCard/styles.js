@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     padding: scalingUtils.scale(5),
     paddingTop: scalingUtils.verticalScale(5),
     backgroundColor: colors.white,
-    borderWidth: scalingUtils.scale(0.5),
+    borderWidth: scalingUtils.scale(1.5),
     borderColor: colors.lightgray,
     borderRadius: 4,
     shadowColor: '#000',
