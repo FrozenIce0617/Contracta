@@ -93,7 +93,7 @@ export const GetContractDocument = gql`
         version
       }
       state
-      bodytext (limit:120){
+      bodytext(limit: 120) {
         items {
           id
           title
@@ -378,6 +378,59 @@ export const CreateFeedback = gql`
       notlike
       add
       userowner {
+        id
+      }
+    }
+  }
+`;
+
+export const ListFactSets = gql`
+  query getCo($id: ID!) {
+    getContract(id: $id) {
+      id
+      name
+      description
+      factset {
+        id
+        factsetname
+        fact {
+          items {
+            id
+            factname
+            factfriendlyvalue
+            factjson
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CreateFactObj = gql`
+  mutation CreateFactObj($input: CreateFactObjInput!) {
+    createFactObj(input: $input) {
+      id
+      factname
+      derivedfrom
+      factfriendlyvalue
+      factjson
+      isEnabled
+      fs {
+        id
+      }
+    }
+  }
+`;
+
+export const CreateFactSet = gql`
+  mutation CreateFactSet($input: CreateFactSetInput!) {
+    createFactSet(input: $input) {
+      id
+      factsetname
+      factsetdomain
+      factsetdoctype
+      factsettemplatecode
+      contract {
         id
       }
     }

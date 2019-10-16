@@ -53,6 +53,20 @@ class ContractDetail extends React.Component {
     });
   };
 
+  onPressFact = () => {
+    const { navigation } = this.props;
+    const item = navigation.getParam('item', { name: '', id: '' });
+    const subContractId =
+      item.contracts &&
+      item.contracts.items.length > 0 &&
+      item.contracts.items[0].id;
+
+    navigation.navigate('FactSet', {
+      contractId: subContractId ? subContractId : '',
+      contractName: item.name,
+    });
+  };
+
   render() {
     const { navigation, contract, loading } = this.props;
     const item = navigation.getParam('item', { name: '', id: '' });
@@ -74,6 +88,7 @@ class ContractDetail extends React.Component {
           onPressBell={() => this.onPressBell(contract)}
           onPressFlash={() => this.onPressFlash(contract)}
           onPressComment={() => this.onPressComment(contract)}
+          onPressFact={() => this.onPressFact()}
         />
         <ScrollView>
           {Object.keys(contract).length !== 0 ? (

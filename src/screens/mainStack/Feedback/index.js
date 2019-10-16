@@ -21,7 +21,6 @@ class Feedback extends React.Component {
     const { client, navigation } = this.props;
     const userId = navigation.getParam('username', '');
     const { like, notlike, add } = this.state;
-    console.log('Client: ', client);
     if (like === '' && notlike === '' && add === '') return;
     client
       .mutate({
