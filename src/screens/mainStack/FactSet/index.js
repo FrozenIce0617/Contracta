@@ -8,12 +8,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { compose, graphql, Mutation } from 'react-apollo';
+import { compose, graphql, withApollo, Mutation } from 'react-apollo';
 import { Button, Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import uuidv4 from 'uuid/v4';
 
-import { ListFactSets, CreateFactObj } from '../../../generated/graphql';
+import {
+  ListFactSets,
+  CreateFactSet,
+  CreateFactObj,
+} from '../../../generated/graphql';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 import { colors } from '../../../styles';
@@ -29,12 +33,59 @@ class FactSet extends React.Component {
     this.setState({ modalVisible: visible });
   }
 
+  createFactSet = () => {
+    const { client, navigation } = this.props;
+    const { factName, factValue } = this.state;
+    const contractId = navigation.getParam('contractId', '');
+    const contractName = navigation.getParam('contractName', '');
+
+    client
+      .mutate({
+        mutation: CreateFactSet,
+        variables: {
+          input: {
+            id: uuidv4(),
+            factsetname: `Fact_${contractName}`,
+            factsetdomain: 'Tenancy',
+            factsetdoctype: 'assuredshorthold',
+            factsettemplatecode: 'tenancy_ash',
+            factSetContractId: contractId,
+          },
+        },
+        fetchPolicy: 'no-cache',
+      })
+      .then(res => {
+        console.log('RES: ', res.data);
+        client
+          .mutate({
+            mutation: CreateFactObj,
+            variables: {
+              input: {
+                id: uuidv4(),
+                factname: factName,
+                derivedfrom: 'UserInput',
+                factfriendlyvalue: factValue,
+                factjson: `{${factName}:${factValue}}`,
+                isEnabled: true,
+                factObjFsId: res.data.createFactSet.id,
+              },
+            },
+          })
+          .then(() => {
+            this.setState({ factName: '', factValue: '' });
+            console.log('Success');
+          })
+          .catch(() => console.log('Failed'));
+      })
+      .catch(err => console.log('Err: ', err));
+  };
+
   render() {
     const { navigation, factSets, loading } = this.props;
     const { modalVisible, factName, factValue } = this.state;
     const contractId = navigation.getParam('contractId', '');
-    const factObjFsId =
-      contractId !== '' && factSets.factset && factSets.factset.id;
+    const factObjId =
+      (factSets && factSets.factset && factSets.factset.id) || '';
 
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -70,18 +121,24 @@ class FactSet extends React.Component {
                       factfriendlyvalue: factValue,
                       factjson: `{${factName}:${factValue}}`,
                       isEnabled: true,
-                      factObjFsId,
+                      factObjFsId: factObjId,
                     },
                   }}
                 >
-                  {createFactMutation => (
+                  {createFactObjMutation => (
                     <Button
                       buttonStyle={styles.btnAddFact}
                       title="Add Fact"
                       onPress={() => {
                         this.setModalVisible(false);
-                        if (factObjFsId) {
-                          createFactMutation();
+                        if (factObjId === undefined || factObjId === '') {
+                          this.createFactSet();
+                        } else {
+                          createFactObjMutation();
+                          this.setState({
+                            factName: '',
+                            factValue: '',
+                          });
                         }
                       }}
                     />
@@ -142,6 +199,7 @@ const FactSetWithData = compose(
     options: props => {
       const { navigation } = props;
       const contractId = navigation.getParam('contractId', '');
+      console.log('ContractID in polling: ', contractId);
       return {
         variables: {
           id: contractId,
@@ -150,13 +208,13 @@ const FactSetWithData = compose(
       };
     },
     props: props => {
-      console.log('Props: ', props);
+      console.log('Polling: ', props);
       return {
-        factSets: props.data.getContract,
+        factSets: props.data.getContract || {},
         loading: props.data.loading,
       };
     },
   }),
-)(FactSet);
+)(withApollo(FactSet));
 
 export default FactSetWithData;

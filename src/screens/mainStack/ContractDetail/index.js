@@ -63,6 +63,7 @@ class ContractDetail extends React.Component {
 
     navigation.navigate('FactSet', {
       contractId: subContractId ? subContractId : '',
+      contractName: item.name,
     });
   };
 

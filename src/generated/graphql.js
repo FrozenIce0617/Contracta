@@ -473,3 +473,18 @@ export const CreateFactObj = gql`
     }
   }
 `;
+
+export const CreateFactSet = gql`
+  mutation CreateFactSet($input: CreateFactSetInput!) {
+    createFactSet(input: $input) {
+      id
+      factsetname
+      factsetdomain
+      factsetdoctype
+      factsettemplatecode
+      contract {
+        id
+      }
+    }
+  }
+`;
