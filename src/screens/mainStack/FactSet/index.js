@@ -199,7 +199,6 @@ const FactSetWithData = compose(
     options: props => {
       const { navigation } = props;
       const contractId = navigation.getParam('contractId', '');
-      console.log('ContractID in polling: ', contractId);
       return {
         variables: {
           id: contractId,
@@ -208,7 +207,6 @@ const FactSetWithData = compose(
       };
     },
     props: props => {
-      console.log('Polling: ', props);
       return {
         factSets: props.data.getContract || {},
         loading: props.data.loading,

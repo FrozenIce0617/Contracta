@@ -44,7 +44,6 @@ class MetaContract extends React.Component {
 
   componentWillMount() {
     Auth.currentUserInfo().then(res => {
-      console.log('Res: ', res);
       this.setState({ userId: res.id, userName: res.username });
     });
   }
@@ -67,7 +66,6 @@ class MetaContract extends React.Component {
     const { userId, userName } = this.state;
 
     try {
-      console.log('User ID while processing file: ', userId);
       let isodate = new Date().toISOString();
       let metaId = '';
 
