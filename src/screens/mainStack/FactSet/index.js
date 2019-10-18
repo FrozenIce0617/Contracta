@@ -17,6 +17,7 @@ import {
   ListFactSets,
   CreateFactSet,
   CreateFactObj,
+  DeleteFactObj,
 } from '../../../generated/graphql';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
@@ -31,6 +32,25 @@ class FactSet extends React.Component {
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
+  }
+  deleteFact = (factIdToDelete) => {
+    const { client, navigation } = this.props;
+    client
+    .mutate({
+      mutation: DeleteFactObj,
+      variables: {
+        input: {
+          id: factIdToDelete,
+        },
+      },
+      fetchPolicy: 'no-cache',
+    })
+    .then(res => {
+      console.log('RES: ', res.data);
+    })
+    .catch(err => console.log('Err: ', err));
+
+ 
   }
 
   createFactSet = () => {
@@ -179,7 +199,9 @@ class FactSet extends React.Component {
                       value={item.factfriendlyvalue}
                     />
                     <TouchableOpacity>
-                      <Icon name="trash-o" size={25} color={colors.navy} />
+                      <Icon name="trash-o" size={25} color={colors.navy} 
+                      onPress={() => this.deleteFact(item.id)}
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>

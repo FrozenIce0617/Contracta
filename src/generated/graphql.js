@@ -436,3 +436,11 @@ export const CreateFactSet = gql`
     }
   }
 `;
+
+
+export const DeleteFactObj = gql`
+mutation DeleteFactObj($input: DeleteFactObjInput!) {
+  deleteFactObj(input: $input) {
+    id
+    }
+  }`
