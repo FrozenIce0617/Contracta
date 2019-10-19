@@ -214,7 +214,7 @@ export const UpdateUser = gql`
 
 export const BodyListDocument = gql`
   query bodyList {
-    listBodys {
+    listBodys (limit: 120){
       items {
         id
         title
