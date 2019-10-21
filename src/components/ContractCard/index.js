@@ -13,10 +13,17 @@ class ContractCard extends React.Component {
     const { intentOptions, priorityOptions, info, onPressStretch } = this.props;
     const borderColor =
       info.priority === 'HIGH'
+<<<<<<< HEAD
         ? '#d03030'
         : info.priority === 'MED'
         ? '#803030'
         : '#303030';
+=======
+        ? '#ff3d00'
+        : info.priority === 'MED'
+        ? '#BDBDBD'
+        : '#90afa3';
+>>>>>>> ee2701ca696af86cc99f1f10c99523316b8ad384
 
     return (
       <View style={{ ...styles.container, borderColor }}>

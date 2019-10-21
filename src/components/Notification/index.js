@@ -28,13 +28,13 @@ class Notification extends React.Component {
                 {/*<MaterialIcons name="expand-more" size={30} color="#000" />*/}
               </TouchableOpacity>
             </View>
-            <Text style={styles.count}>2</Text>
+            {/*<Text style={styles.count}>2</Text>*/}
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
               <Fontisto name="email" size={30} color="#000" />
             </View>
-            <Text style={styles.count}>2</Text>
+             {/*<Text style={styles.count}>2</Text>*/}
           </View>
           <View style={styles.section}>
             <View style={styles.icon}>
@@ -42,7 +42,7 @@ class Notification extends React.Component {
                 <Ionicons name="ios-flash" size={30} color="#000" />
               </TouchableOpacity>
             </View>
-            <Text style={styles.count}>2</Text>
+             {/*<Text style={styles.count}>2</Text>*/}
           </View>
         </View>
         <View style={styles.row}>
@@ -66,7 +66,7 @@ class Notification extends React.Component {
                 <FontAwesome name="comment-o" size={30} color="#000" />
               </TouchableOpacity>
             </View>
-            <Text style={styles.count}>5</Text>
+             {/*<Text style={styles.count}>2</Text>*/}
           </View>
         </View>
       </View>

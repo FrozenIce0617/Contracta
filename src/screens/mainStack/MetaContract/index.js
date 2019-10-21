@@ -77,7 +77,7 @@ class MetaContract extends React.Component {
               id: uuidv4(),
               name: item.filename,
               description: 'Automated file processing for ' + item.filename,
-              url: `s3://${item.folder}${item.filename}`,
+              url: encodeURI(`s3://${item.folder}${item.filename}`),
               date: isodate.split('T')[0],
               lang: 'en',
               arn: 'NA',
@@ -221,7 +221,7 @@ class MetaContract extends React.Component {
         </SafeAreaView>
       );
     }
-
+    console.log("Current props," , this.props);
     return (
       <SafeAreaView style={styles.container}>
         <Modal
@@ -343,9 +343,9 @@ class MetaContract extends React.Component {
           <Text style={styles.category}>Unprocessed Contracts</Text>
           <ScrollView horizontal>
             <View>
-              {Object.keys(contract).length !== 0 ? (
+              {Object.keys(files).length !== 0 ? (
                 <View style={styles.contractContainer}>
-                  {console.log('Analysing unprocessed via: ', contract)}
+                  {/*console.log('Analysing unprocessed via: ', files)*/}
                   {files.items.map((unprocessedFile, index) => {
                     if (unprocessedFile.filestate !== 0) return;
                     return (
