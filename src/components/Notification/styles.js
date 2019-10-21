@@ -35,6 +35,31 @@ const styles = StyleSheet.create({
     fontSize: scalingUtils.verticalScale(16),
     color: colors.black,
   },
+  filterContainer: {
+    borderTopWidth: scalingUtils.verticalScale(2),
+    borderTopColor: '#1E8AF6',
+  },
+  category: {
+    flex: 3,
+    flexDirection: 'row',
+  },
+  filterType: {
+    flex: 5,
+    marginTop: -scalingUtils.verticalScale(20),
+    width: '100%',
+  },
+  sortOrder: {
+    flex: 1,
+    height: scalingUtils.scale(35),
+    marginTop: scalingUtils.verticalScale(10),
+    marginLeft: scalingUtils.verticalScale(10),
+  },
+  filterDir: {
+    flex: 2,
+    marginTop: -scalingUtils.verticalScale(20),
+    marginLeft: scalingUtils.scale(10),
+    width: '100%',
+  },
 });
 
 export default styles;

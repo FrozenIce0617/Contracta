@@ -23,6 +23,15 @@ const priorityOptions = [
 ];
 //Todo: implement onPressBell, onPressEmail, onPressFlash, onPressShare, onPressExport, onPressComment
 class ContractDetail extends React.Component {
+  state = {
+    // SortOrder: 1 - ASC, -1 - DESC
+    sortOrder: 1,
+    // FilterType: 0 - ALL, 1 - HIGH, 2 - MED, 3 - LOW
+    filterType: 'ALL',
+    // SortType: 0 - Priority, 1 - Seq
+    sortType: 0,
+  };
+
   onPressBell = item => {
     const { navigation } = this.props;
     navigation.navigate('ContractAlert', {
@@ -67,9 +76,24 @@ class ContractDetail extends React.Component {
     });
   };
 
+  onChangeFilter = text => {
+    this.setState({ filterType: text });
+  };
+
+  onChangeOrder = sortOrder => {
+    this.setState({ sortOrder });
+  };
+
+  onChangeSortType = sortType => {
+    if (sortType === 'Priority') this.setState({ sortType: 0 });
+    else if (sortType === 'Sequence') this.setState({ sortType: 1 });
+  };
+
   render() {
     const { navigation, contract, loading } = this.props;
+    const { sortType, sortOrder, filterType } = this.state;
     const item = navigation.getParam('item', { name: '', id: '' });
+    const prio = ['LOW', 'MED', 'HIGH'];
 
     if (loading === true) {
       return (
@@ -89,11 +113,29 @@ class ContractDetail extends React.Component {
           onPressFlash={() => this.onPressFlash(contract)}
           onPressComment={() => this.onPressComment(contract)}
           onPressFact={() => this.onPressFact()}
+          onChangeFilter={text => this.onChangeFilter(text)}
+          onChangeOrder={sortOrder => this.onChangeOrder(sortOrder)}
+          onChangeSortType={sortType => this.onChangeSortType(sortType)}
         />
         <ScrollView>
           {Object.keys(contract).length !== 0 ? (
             contract.bodytext.items
-              .sort((a, b) => a.seqnr - b.seqnr)
+              .filter(item => {
+                if (filterType === 'ALL') return item;
+                else if (item.priority === filterType) return item;
+                return;
+              })
+              .sort((a, b) => {
+                if (sortType !== 1) return 0;
+                return (a.seqnr - b.seqnr) * sortOrder;
+              })
+              .sort((a, b) => {
+                if (sortType !== 0) return 0;
+                return (
+                  sortOrder *
+                  (prio.indexOf(a.priority) - prio.indexOf(b.priority))
+                );
+              })
               .map((bt, i) => (
                 <ContractCard
                   key={i}

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scalingUtils, colors } from '../../../styles';
+import { scalingUtils } from '../../../styles';
 
 const styles = StyleSheet.create({
   safeContainer: {
@@ -7,8 +7,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
-    // paddingTop: 65,
+    padding: scalingUtils.scale(20),
     backgroundColor: 'white',
   },
   indicatorContainer: {
@@ -18,7 +17,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginTop: 20,
+    marginTop: scalingUtils.verticalScale(20),
   },
 });
 
