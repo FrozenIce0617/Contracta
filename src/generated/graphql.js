@@ -185,6 +185,9 @@ export const GetUser = gql`
       lastname
       contractaemail
       isTermsAndPrivacyAgreed
+      timeline {
+        id
+      }
       files {
         items {
           id
@@ -484,6 +487,27 @@ export const CreateFactSet = gql`
       factsettemplatecode
       contract {
         id
+      }
+    }
+  }
+`;
+
+export const GetTimelineEvents = gql`
+  query getTimelineEvents($id: ID!) {
+    getTimeline(id: $id) {
+      timelineName
+      event {
+        items {
+          id
+          name
+          start
+          end
+          description
+          isPayment
+          isDeadline
+          amount
+          currency
+        }
       }
     }
   }

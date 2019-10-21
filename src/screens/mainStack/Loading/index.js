@@ -4,8 +4,6 @@ import { Auth } from 'aws-amplify';
 import { withApollo } from '@apollo/react-hoc';
 import { ApolloConsumer } from 'react-apollo';
 
-import { GetUser } from '../../../generated/graphql';
-
 import styles from './styles';
 
 class Loading extends React.Component {

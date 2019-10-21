@@ -1,92 +1,92 @@
 import React from 'react';
-import { SafeAreaView, View, RefreshControl, ActivityIndicator, Text } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Input, Button } from 'react-native-elements';
-import Timeline from 'react-native-timeline-listview'
+import Timeline from 'react-native-timeline-listview';
+import { API, graphqlOperation } from 'aws-amplify';
 
-
+import { GetUser, GetTimelineEvents } from '../../../generated/graphql';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
 class TimelineModule extends React.Component {
+  state = {
+    isRefreshing: false,
+    waiting: true,
+    data: [],
+  };
 
-  constructor(){
-    super()
-    this.onEndReached = this.onEndReached.bind(this)
-    this.renderFooter = this.renderFooter.bind(this)
-    this.onRefresh = this.onRefresh.bind(this)
+  getTimelineData() {
+    const { navigation } = this.props;
+    const userId = navigation.getParam('username', '');
 
-    this.data = [
-      {time: '06/06/19', title: 'Rent & Deposit Paid', description: 'Event 1 Description'},
-      {time: '11/06/19', title: 'Rental Start', description: 'Event 2 Description'},
-      {time: '12/08/19', title: 'Break Allowed', description: 'Event 3 Description'},
-      {time: '11/05/20', title: 'Renewal Allowed', description: 'Event 4 Description'},
-      {time: '11/06/20', title: 'Monthly Rolling', description: 'Event 5 Description'}
-    ]
-
-    this.state = {
-      isRefreshing: false,      
-      waiting: false,
-      data: this.data
-    }
-  } 
-  onRefresh(){
-    this.setState({isRefreshing: true});
-    //refresh to initial data
-    setTimeout(() => {
-      //refresh to initial data
-      this.setState({
-        data: this.data,
-        isRefreshing: false
-      });
-    }, 2000);
+    API.graphql(
+      graphqlOperation(GetUser, {
+        id: userId,
+      }),
+    )
+      .then(result => {
+        const timelineId = result.data.getUser.timeline.id;
+        API.graphql(
+          graphqlOperation(GetTimelineEvents, {
+            id: timelineId,
+          }),
+        )
+          .then(res => {
+            let data = [];
+            res.data.getTimeline.event.items.map(item => {
+              data = [
+                ...data,
+                {
+                  time: item.start,
+                  title: item.name,
+                  description: item.description,
+                },
+              ];
+              return true;
+            });
+            this.setState({ data, waiting: false });
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
-  
-  onEndReached() {
-    if (!this.state.waiting) {
-        this.setState({waiting: true});
 
-        //fetch and concat data
-        setTimeout(() => {
-
-          //refresh to initial data
-          var data = this.state.data.concat(
-            [
-              {time: '11/06/20', title: 'Load more data', description: 'append event at bottom of timeline'},
-              {time: '11/06/20', title: 'Load more data', description: 'append event at bottom of timeline'},
-              {time: '11/06/20', title: 'Load more data', description: 'append event at bottom of timeline'},
-              {time: '11/06/20', title: 'Load more data', description: 'append event at bottom of timeline'},
-              {time: '11/06/20', title: 'Load more data', description: 'append event at bottom of timeline'}
-            ]
-            )
-
-          this.setState({
-            waiting: false,
-            data: data,
-          });
-        }, 2000);
-    }
+  componentDidMount() {
+    this.getTimelineData();
   }
-  
-  renderFooter() {
-    if (this.state.waiting) {
-        return <ActivityIndicator />;
-    } else {
-        return <Text>~</Text>;
+
+  renderFooter = () => {
+    const { waiting } = this.state;
+
+    if (waiting) {
+      return <ActivityIndicator size="large" color="#1E8AF6" />;
     }
-  }
+  };
 
   render() {
+    const { data } = this.state;
+
     return (
       <SafeAreaView style={styles.safeContainer}>
         <HeaderBar heading="Timeline" {...this.props} />
         <View style={styles.container}>
-          <Timeline 
-            timeContainerStyle={{minWidth:72}}
+          <Timeline
+            timeContainerStyle={{ minWidth: 72 }}
             style={styles.list}
-            data={this.data}
+            data={data}
+            innerCircle="dot"
+            circleSize={20}
+            lineColor={'rgb(45, 156, 219)'}
+            descriptionStyle={{ color: 'gray' }}
             options={{
-              style:{paddingTop:5},
+              style: { paddingTop: 5 },
               refreshControl: (
                 <RefreshControl
                   refreshing={this.state.isRefreshing}
@@ -94,10 +94,10 @@ class TimelineModule extends React.Component {
                 />
               ),
               renderFooter: this.renderFooter,
-              onEndReached: this.onEndReached
+              // onEndReached: this.onEndReached,
             }}
           />
-      </View>
+        </View>
       </SafeAreaView>
     );
   }

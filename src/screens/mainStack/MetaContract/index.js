@@ -389,7 +389,7 @@ class MetaContract extends React.Component {
 
 const MetaContractWithData = compose(
   graphql(MetaContractList, {
-    options: { fetchPolicy: 'network-only', pollInterval: 500 },
+    options: { fetchPolicy: 'network-only' /* pollInterval: 500 */ },
     props: props => ({
       contract:
         props.data.listMetaContracts && props.data.listMetaContracts.items
