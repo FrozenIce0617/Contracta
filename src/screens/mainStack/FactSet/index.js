@@ -75,7 +75,6 @@ class FactSet extends React.Component {
         fetchPolicy: 'no-cache',
       })
       .then(res => {
-        console.log('RES: ', res.data);
         client
           .mutate({
             mutation: CreateFactObj,
@@ -93,7 +92,6 @@ class FactSet extends React.Component {
           })
           .then(() => {
             this.setState({ factName: '', factValue: '' });
-            console.log('Success');
           })
           .catch(() => console.log('Failed'));
       })
@@ -225,7 +223,7 @@ const FactSetWithData = compose(
         variables: {
           id: contractId,
         },
-        pollInterval: 500,
+        // pollInterval: 500,
       };
     },
     props: props => {

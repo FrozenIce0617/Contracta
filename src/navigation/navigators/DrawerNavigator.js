@@ -109,8 +109,8 @@ const AppDrawerNavigator = createDrawerNavigator(
         ),
       },
     },
-    /*[drawerTitles.TimelineModule]: {
-      screen: TimeLineModuleScreen,
+    [drawerTitles.TimelineModule]: {
+      screen: props => <TimeLineModuleScreen {...props} />,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons
@@ -120,7 +120,7 @@ const AppDrawerNavigator = createDrawerNavigator(
           />
         ),
       },
-    },*/
+    },
     [drawerTitles.Feedback]: {
       screen: props => <FeedbackScreen {...props} />,
       navigationOptions: {

@@ -185,6 +185,9 @@ export const GetUser = gql`
       lastname
       contractaemail
       isTermsAndPrivacyAgreed
+      timeline {
+        id
+      }
       files {
         items {
           id
@@ -214,7 +217,7 @@ export const UpdateUser = gql`
 
 export const BodyListDocument = gql`
   query bodyList {
-    listBodys (limit: 120){
+    listBodys(limit: 120) {
       items {
         id
         title
@@ -437,10 +440,31 @@ export const CreateFactSet = gql`
   }
 `;
 
+export const GetTimelineEvents = gql`
+  query getTimelineEvents($id: ID!) {
+    getTimeline(id: $id) {
+      timelineName
+      event {
+        items {
+          id
+          name
+          start
+          end
+          description
+          isPayment
+          isDeadline
+          amount
+          currency
+        }
+      }
+    }
+  }
+`;
 
 export const DeleteFactObj = gql`
-mutation DeleteFactObj($input: DeleteFactObjInput!) {
-  deleteFactObj(input: $input) {
-    id
+  mutation DeleteFactObj($input: DeleteFactObjInput!) {
+    deleteFactObj(input: $input) {
+      id
     }
-  }`
+  }
+`;
