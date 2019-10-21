@@ -53,12 +53,6 @@ class ContractExpand extends React.Component {
             <View>
               <Text>{info.rawtext}</Text>
             </View>
-            {/* <View>
-              <Text style={styles.textCategory}>Content:</Text>
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <Text>{info.description}</Text>
-            </View> */}
           </View>
           <View>
             <View style={styles.borderTop}>
