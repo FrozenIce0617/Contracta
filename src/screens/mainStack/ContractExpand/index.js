@@ -34,6 +34,7 @@ class ContractExpand extends React.Component {
           <View>
             <View style={styles.row}>
               <View style={styles.row}>
+                {/*
                 <View style={styles.category}>
                   <Text>INTENT: </Text>
                 </View>
@@ -46,7 +47,7 @@ class ContractExpand extends React.Component {
                     baseColor={colors.navy}
                     textColor={colors.navy}
                   />
-                </View>
+                </View>*/}
               </View>
             </View>
             <View>
