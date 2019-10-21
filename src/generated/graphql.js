@@ -512,3 +512,11 @@ export const GetTimelineEvents = gql`
     }
   }
 `;
+
+export const DeleteFactObj = gql`
+  mutation DeleteFactObj($input: DeleteFactObjInput!) {
+    deleteFactObj(input: $input) {
+      id
+    }
+  }
+`;
