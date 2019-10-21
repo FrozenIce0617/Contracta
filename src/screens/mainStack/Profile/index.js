@@ -17,8 +17,11 @@ import styles from './styles';
 class Profile extends React.Component {
   onEditProfile = () => {
     const { navigation, userInfo } = this.props;
+    const userName = navigation.getParam('username', {});
+
     navigation.navigate('EditProfile', {
       userInfo,
+      userName,
     });
   };
 
