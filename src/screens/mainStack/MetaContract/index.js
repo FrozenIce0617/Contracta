@@ -359,7 +359,7 @@ class MetaContract extends React.Component {
                       <View style={styles.contractItem}>
                         <View style={[styles.center, styles.preview]}>
                           <Image
-                            source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
+                            source={require('../../../assets/images/PDF.png')}
                             style={styles.previewIcon}
                           />
                         </View>
@@ -399,9 +399,7 @@ class MetaContract extends React.Component {
                         <View style={styles.contractItem}>
                           <View style={[styles.center, styles.preview]}>
                             <Image
-                              source={{
-                                uri: 'https://imgur.com/Tq8xJsD.png',
-                              }}
+                              source={require('../../../assets/images/TBD.png')}
                               style={styles.previewIcon}
                             />
                           </View>
