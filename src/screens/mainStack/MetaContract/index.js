@@ -39,7 +39,17 @@ class MetaContract extends React.Component {
       userName: '',
       showModal: '',
       myMetaContractId: '',
+      contract: [],
+      files: [],
     };
+  }
+
+  componentDidMount() {
+    const { contract, files } = this.props;
+    this.setState({
+      contract,
+      files,
+    });
   }
 
   componentWillMount() {
@@ -63,13 +73,13 @@ class MetaContract extends React.Component {
 
   _onPressProcessFile = item => {
     const { client } = this.props;
-    const { userId, userName } = this.state;
+    const { userName } = this.state;
 
     try {
       let isodate = new Date().toISOString();
       let metaId = '';
 
-      const mutResult = client
+      client
         .mutate({
           mutation: CreateMetaContract,
           variables: {
@@ -90,11 +100,6 @@ class MetaContract extends React.Component {
           fetchPolicy: 'no-cache',
         })
         .then(async res => {
-          console.log('Mutation results res ', res);
-          console.log(
-            'Passing on REST API for MC id ',
-            res.data.createMetaContract.id,
-          );
           metaId = res.data.createMetaContract.id;
           //Todo: set state is not working in this context. @yuriy pls check
           //this.setState({ myMetaContractId: metaId });
@@ -136,7 +141,6 @@ class MetaContract extends React.Component {
             });
         })
         .catch(function(err) {
-          console.log('Mutation unsuccessful err ', err);
           Alert.alert('Fail', 'Unprocessed file creation failed', [
             { text: 'OK' },
           ]);
@@ -159,7 +163,7 @@ class MetaContract extends React.Component {
       const res = await Storage.put(fileName, blobData, access);
       console.log('User ID: ', userId);
       console.log('S3 response: ', res);
-      const mutResult = client
+      client
         .mutate({
           mutation: CreateFile,
           variables: {
@@ -199,6 +203,37 @@ class MetaContract extends React.Component {
       .catch(err => console.log('Error: ', err));
   };
 
+  onPressRefresh = async () => {
+    const { client } = this.props;
+
+    await client
+      .query({
+        query: MetaContractList,
+        fetchPolicy: 'no-cache',
+      })
+      .then(res => {
+        this.setState({
+          contract:
+            res.data.listMetaContracts && res.data.listMetaContracts.items
+              ? res.data.listMetaContracts.items
+              : [],
+        });
+      })
+      .catch(err => console.log(err));
+
+    await client
+      .query({
+        query: ListFiles,
+        fetchPolicy: 'no-cache',
+      })
+      .then(res => {
+        this.setState({
+          files: res.data.listFiles ? res.data.listFiles : [],
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   onSignOut = () => {
     const { screenProps } = this.props;
     Auth.signOut()
@@ -207,8 +242,8 @@ class MetaContract extends React.Component {
   };
 
   render() {
-    const { contract, userInfo, files, loading } = this.props;
-    const { showModal } = this.state;
+    const { userInfo, loading } = this.props;
+    const { showModal, contract, files } = this.state;
     const isVisible =
       showModal === '' ? !userInfo.isTermsAndPrivacyAgreed : showModal;
 
@@ -221,7 +256,6 @@ class MetaContract extends React.Component {
         </SafeAreaView>
       );
     }
-    console.log("Current props," , this.props);
     return (
       <SafeAreaView style={styles.container}>
         <Modal
@@ -298,10 +332,17 @@ class MetaContract extends React.Component {
         </View>
         <View style={styles.btnUpload}>
           <Button
-            title="Upload a new document"
+            title="Upload"
             titleStyle={styles.btnFontSize}
             icon={<Icon name="upload" size={20} color="white" />}
             onPress={this.onPressUpload}
+          />
+          <Button
+            buttonStyle={{ marginLeft: 20 }}
+            title="Refresh"
+            titleStyle={styles.btnFontSize}
+            icon={<Icon name="refresh" size={20} color="white" />}
+            onPress={this.onPressRefresh}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -318,7 +359,7 @@ class MetaContract extends React.Component {
                       <View style={styles.contractItem}>
                         <View style={[styles.center, styles.preview]}>
                           <Image
-                            source={{ uri: 'https://imgur.com/Tq8xJsD.png' }}
+                            source={require('../../../assets/images/PDF.png')}
                             style={styles.previewIcon}
                           />
                         </View>
@@ -358,9 +399,7 @@ class MetaContract extends React.Component {
                         <View style={styles.contractItem}>
                           <View style={[styles.center, styles.preview]}>
                             <Image
-                              source={{
-                                uri: 'https://imgur.com/Tq8xJsD.png',
-                              }}
+                              source={require('../../../assets/images/TBD.png')}
                               style={styles.previewIcon}
                             />
                           </View>

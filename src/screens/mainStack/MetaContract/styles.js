@@ -38,8 +38,10 @@ const styles = StyleSheet.create({
     color: colors.navy,
   },
   btnUpload: {
+    flexDirection: 'row',
     margin: scalingUtils.scale(15),
     marginBottom: 0,
+    justifyContent: 'flex-end',
   },
   btnFontSize: {
     marginLeft: scalingUtils.scale(10),
