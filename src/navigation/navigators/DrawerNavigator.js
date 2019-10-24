@@ -11,6 +11,7 @@ import { Avatar, Divider, Button } from 'react-native-elements';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 import MetaContractScreen from '../../screens/mainStack/MetaContract';
+import ChatScreen from '../../screens/mainStack/GiftedChat';
 import TimeLineModuleScreen from '../../screens/mainStack/Timeline';
 import FeedbackScreen from '../../screens/mainStack/Feedback';
 import ProfileScreen from '../../screens/mainStack/Profile';
@@ -20,6 +21,7 @@ import { scalingUtils } from '../../styles';
 const drawerTitles = {
   Home: 'Home',
   TimelineModule: 'Timeline',
+  Chat: 'Chat',
   Feedback: 'Feedback',
   Settings: 'Settings',
   About: 'About App',
@@ -111,6 +113,18 @@ const AppDrawerNavigator = createDrawerNavigator(
     },
     [drawerTitles.TimelineModule]: {
       screen: props => <TimeLineModuleScreen {...props} />,
+      navigationOptions: {
+        drawerIcon: ({ tintColor }) => (
+          <SimpleLineIcons
+            name="clock"
+            size={24}
+            style={{ color: tintColor }}
+          />
+        ),
+      },
+    },
+    [drawerTitles.Chat]: {
+      screen: ChatScreen,
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons
