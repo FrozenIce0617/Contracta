@@ -128,7 +128,7 @@ const AppDrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerIcon: ({ tintColor }) => (
           <SimpleLineIcons
-            name="clock"
+            name="people"
             size={24}
             style={{ color: tintColor }}
           />
