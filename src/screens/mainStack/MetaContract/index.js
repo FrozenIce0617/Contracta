@@ -38,9 +38,13 @@ class MetaContract extends React.Component {
       userId: '',
       userName: '',
       showModal: '',
+      showMenu: false,
+      showUnprocessedMenu: false,
       myMetaContractId: '',
       contract: [],
       files: [],
+      curContract: null,
+      curUnprocessed: null,
     };
   }
 
@@ -243,7 +247,13 @@ class MetaContract extends React.Component {
 
   render() {
     const { userInfo, loading } = this.props;
-    const { showModal, contract, files } = this.state;
+    const {
+      showModal,
+      showMenu,
+      showUnprocessedMenu,
+      contract,
+      files,
+    } = this.state;
     const isVisible =
       showModal === '' ? !userInfo.isTermsAndPrivacyAgreed : showModal;
 
@@ -320,6 +330,128 @@ class MetaContract extends React.Component {
             </View>
           </SafeAreaView>
         </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={showMenu}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}
+        >
+          <SafeAreaView style={styles.safeContainer}>
+            <View style={styles.termsContainer}>
+              <Card
+                title="Contract Manipulation"
+                containerStyle={styles.termsCardContainer}
+                titleStyle={styles.termsTitle}
+              >
+                <Button
+                  buttonStyle={[styles.btnAction, styles.firstChild]}
+                  title="View as Card"
+                  titleStyle={styles.titleAction}
+                  onPress={() => {
+                    const { curContract } = this.state;
+                    this.setState({ showMenu: false });
+                    if (curContract === null) return;
+                    this.onPressDetails(curContract);
+                  }}
+                />
+                <Divider style={styles.actionDivider} />
+                <Button
+                  buttonStyle={styles.btnAction}
+                  title="View as TXT"
+                  titleStyle={styles.titleAction}
+                  disabled
+                  disabledStyle={styles.btnAction}
+                />
+                <Divider style={styles.actionDivider} />
+                <Button
+                  buttonStyle={styles.btnAction}
+                  title="Delete contract"
+                  titleStyle={styles.titleAction}
+                  disabled
+                  disabledStyle={styles.btnAction}
+                />
+                <Divider style={styles.actionFooterDivider} />
+                <View style={styles.termsRow}>
+                  <Button
+                    buttonStyle={styles.termsAccept}
+                    title="Cancel"
+                    onPress={() => {
+                      this.setState({
+                        showMenu: false,
+                      });
+                    }}
+                  />
+                </View>
+              </Card>
+            </View>
+          </SafeAreaView>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={showUnprocessedMenu}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}
+        >
+          <SafeAreaView style={styles.safeContainer}>
+            <View style={styles.termsContainer}>
+              <Card
+                title="Contract Manipulation"
+                containerStyle={styles.termsCardContainer}
+                titleStyle={styles.termsTitle}
+              >
+                <Button
+                  buttonStyle={[styles.btnAction, styles.firstChild]}
+                  title="Process Original"
+                  titleStyle={styles.titleAction}
+                  onPress={() => {
+                    const { curUnprocessed } = this.state;
+                    this.setState({ showUnprocessedMenu: false });
+                    if (curUnprocessed === null) return;
+                    this._onPressProcessFile(curUnprocessed);
+                  }}
+                />
+                <Divider style={styles.actionDivider} />
+                <Button
+                  buttonStyle={styles.btnAction}
+                  title="Process En"
+                  titleStyle={styles.titleAction}
+                  disabledStyle={styles.btnAction}
+                  disabled
+                />
+                <Divider style={styles.actionDivider} />
+                <Button
+                  buttonStyle={styles.btnAction}
+                  title="Process Es"
+                  titleStyle={styles.titleAction}
+                  disabledStyle={styles.btnAction}
+                  disabled
+                />
+                <Divider style={styles.actionDivider} />
+                <Button
+                  buttonStyle={styles.btnAction}
+                  title="Process Ar"
+                  titleStyle={styles.titleAction}
+                  disabledStyle={styles.btnAction}
+                  disabled
+                />
+                <Divider style={styles.actionFooterDivider} />
+                <View style={styles.termsRow}>
+                  <Button
+                    buttonStyle={styles.termsAccept}
+                    title="Cancel"
+                    onPress={() => {
+                      this.setState({ showUnprocessedMenu: false });
+                    }}
+                  />
+                </View>
+              </Card>
+            </View>
+          </SafeAreaView>
+        </Modal>
         <HeaderNavigatorBar {...this.props} />
         <Header
           name={`${userInfo.firstname} ${userInfo.lastname}`}
@@ -354,7 +486,10 @@ class MetaContract extends React.Component {
                   {contract.map(item => (
                     <TouchableOpacity
                       key={item.id}
-                      onPress={() => this.onPressDetails(item)}
+                      // onPress={() => this.onPressDetails(item)}
+                      onPress={() =>
+                        this.setState({ showMenu: true, curContract: item })
+                      }
                     >
                       <View style={styles.contractItem}>
                         <View style={[styles.center, styles.preview]}>
@@ -392,9 +527,15 @@ class MetaContract extends React.Component {
                     return (
                       <TouchableOpacity
                         key={index}
-                        onPress={() =>
-                          this._onPressProcessFile(unprocessedFile)
-                        }
+                        // onPress={() =>
+                        //   this._onPressProcessFile(unprocessedFile)
+                        // }
+                        onPress={() => {
+                          this.setState({
+                            showUnprocessedMenu: true,
+                            curUnprocessed: unprocessedFile,
+                          });
+                        }}
                       >
                         <View style={styles.contractItem}>
                           <View style={[styles.center, styles.preview]}>
