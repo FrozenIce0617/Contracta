@@ -94,11 +94,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: scalingUtils.scale(15),
   },
+  actionFooterDivider: {
+    marginBottom: scalingUtils.scale(20),
+  },
   termsDivider: {
     marginTop: scalingUtils.scale(20),
     marginBottom: scalingUtils.scale(20),
     height: scalingUtils.verticalScale(0.5),
     backgroundColor: colors.navy,
+  },
+  firstChild: {
+    marginTop: -scalingUtils.scale(15),
+  },
+  btnAction: {
+    backgroundColor: colors.white,
+  },
+  titleAction: {
+    color: colors.navy,
   },
   termsAccept: {
     backgroundColor: colors.navy,
