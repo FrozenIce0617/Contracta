@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
+  Linking
 } from 'react-native';
 import { compose, graphql, withApollo, Mutation } from 'react-apollo';
 import { Auth, Analytics, Storage } from 'aws-amplify';
@@ -33,6 +34,7 @@ import styles from './styles';
 class MetaContract extends React.Component {
   constructor(props) {
     super(props);
+    
 
     this.state = {
       userId: '',
@@ -45,8 +47,20 @@ class MetaContract extends React.Component {
       files: [],
       curContract: null,
       curUnprocessed: null,
+      url:"https://s3.amazonaws.com/connectedai.co.uk/Contracta+-+Privacy+Policy.html"
     };
   }
+
+  handleClick = () => {
+    const { url } = this.state;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        console.log("Don't know how to open URI: " + url);
+      }
+    });
+  };
 
   componentDidMount() {
     const { contract, files } = this.props;
@@ -286,13 +300,19 @@ class MetaContract extends React.Component {
                 <Text style={styles.termsContent}>
                   If you would like to contact us to understand more about this
                   Agreement or wish to contact us concerning any matter relating
-                  to it, you may send an email to info@contracta.com.
+                  to it, you may send an email to info@contracta.xyz
                 </Text>
                 <Text style={styles.termsContent}>
                   This document was last updated on September 9, 2019.
                 </Text>
+                
+                <TouchableOpacity onPress={this.handleClick}>
+                  <Text style={styles.termsLink}>Privacy Policy</Text>
+                </TouchableOpacity>
+                {/*
                 <Text style={styles.termsLink}>Privacy Policy</Text>
                 <Text style={styles.termsLink}>Terms of Use</Text>
+                */}
                 <Divider style={styles.termsDivider} />
                 <View style={styles.termsRow}>
                   <Mutation
