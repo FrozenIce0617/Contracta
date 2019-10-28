@@ -3,9 +3,13 @@ import { SafeAreaView } from 'react-native';
 import { compose, withApollo } from 'react-apollo';
 import { withNavigation } from 'react-navigation';
 import { GiftedChat } from 'react-native-gifted-chat';
+import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
+
+const lexRunTime = new AWS.LexRuntime();
+const lexUserId = 'mediumBot' + Date.now();
 
 class Feedback extends React.Component {
   state = {
@@ -29,11 +33,48 @@ class Feedback extends React.Component {
     });
   }
 
-  onSend(messages = []) {
+  showRequest = inputText => {
+    // Add text input to messages in state
     this.setState(prevState => ({
       messages: GiftedChat.append(prevState.messages, messages),
     }));
-  }
+    this.sendToLex(inputText);
+  };
+
+  handleTextSubmit = message => {
+    const inputText = message.trim();
+    if (inputText !== '') this.showRequest(inputText);
+  };
+
+  sendToLex = message => {
+    const params = {
+      botAlias: '$LATEST',
+      botName: 'Your-Bot-Name',
+      inputText: message,
+      userId: lexUserId,
+    };
+    lexRunTime.postText(params, (err, data) => {
+      if (err) {
+        // TODO SHOW ERROR ON MESSAGES
+      }
+      if (data) {
+        this.showResponse(data);
+      }
+    });
+  };
+
+  showResponse = lexResponse => {
+    const lexMessage = lexResponse.message;
+    this.setState(prevState => ({
+      messages: GiftedChat.append(prevState.messages, lexMessage),
+    }));
+  };
+
+  onSend = (messages = []) => {
+    this.setState(prevState => ({
+      messages: GiftedChat.append(prevState.messages, messages),
+    }));
+  };
 
   render() {
     const { messages } = this.state;
