@@ -1,13 +1,9 @@
 import React from 'react';
-import { SafeAreaView, View, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { compose, withApollo } from 'react-apollo';
-import { Analytics } from 'aws-amplify';
 import { withNavigation } from 'react-navigation';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { Input, Button } from 'react-native-elements';
-import uuidv4 from 'uuid/v4';
 
-import { CreateFeedback } from '../../../generated/graphql';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
