@@ -17,15 +17,6 @@ import awsConfig from './aws-exports';
 
 Amplify.configure({
   ...awsConfig,
-  Interactions: {
-    bots: {
-      ScheduleAppointment_devv: {
-        name: 'ScheduleAppointment_devv',
-        alias: '$LATEST',
-        region: 'us-east-1',
-      },
-    },
-  },
   Analytics: {
     disabled: false,
     AWSPinpoint: {
