@@ -1,17 +1,16 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { compose, withApollo } from 'react-apollo';
 import { withNavigation } from 'react-navigation';
 import { GiftedChat } from 'react-native-gifted-chat';
-import AWS from 'aws-sdk/dist/aws-sdk-react-native';
+import { ChatBot } from 'aws-amplify-react-native';
 
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
 
 const lexRunTime = new AWS.LexRuntime();
-const lexUserId = 'mediumBot' + Date.now();
 
-class Feedback extends React.Component {
+class Chat extends React.Component {
   state = {
     messages: [],
   };
@@ -33,42 +32,42 @@ class Feedback extends React.Component {
     });
   }
 
-  showRequest = inputText => {
-    // Add text input to messages in state
-    this.setState(prevState => ({
-      messages: GiftedChat.append(prevState.messages, messages),
-    }));
-    this.sendToLex(inputText);
-  };
+  // showRequest = inputText => {
+  //   // Add text input to messages in state
+  //   this.setState(prevState => ({
+  //     messages: GiftedChat.append(prevState.messages, messages),
+  //   }));
+  //   this.sendToLex(inputText);
+  // };
 
-  handleTextSubmit = message => {
-    const inputText = message.trim();
-    if (inputText !== '') this.showRequest(inputText);
-  };
+  // handleTextSubmit = message => {
+  //   const inputText = message.trim();
+  //   if (inputText !== '') this.showRequest(inputText);
+  // };
 
-  sendToLex = message => {
-    const params = {
-      botAlias: '$LATEST',
-      botName: 'Your-Bot-Name',
-      inputText: message,
-      userId: lexUserId,
-    };
-    lexRunTime.postText(params, (err, data) => {
-      if (err) {
-        // TODO SHOW ERROR ON MESSAGES
-      }
-      if (data) {
-        this.showResponse(data);
-      }
-    });
-  };
+  // sendToLex = message => {
+  //   const params = {
+  //     botAlias: '$LATEST',
+  //     botName: 'Your-Bot-Name',
+  //     inputText: message,
+  //     userId: lexUserId,
+  //   };
+  //   lexRunTime.postText(params, (err, data) => {
+  //     if (err) {
+  //       // TODO SHOW ERROR ON MESSAGES
+  //     }
+  //     if (data) {
+  //       this.showResponse(data);
+  //     }
+  //   });
+  // };
 
-  showResponse = lexResponse => {
-    const lexMessage = lexResponse.message;
-    this.setState(prevState => ({
-      messages: GiftedChat.append(prevState.messages, lexMessage),
-    }));
-  };
+  // showResponse = lexResponse => {
+  //   const lexMessage = lexResponse.message;
+  //   this.setState(prevState => ({
+  //     messages: GiftedChat.append(prevState.messages, lexMessage),
+  //   }));
+  // };
 
   onSend = (messages = []) => {
     this.setState(prevState => ({
@@ -76,13 +75,23 @@ class Feedback extends React.Component {
     }));
   };
 
+  handleComplete(err, confirmation) {
+    if (err) {
+      alert('Bot conversation failed');
+      return;
+    }
+
+    alert('Success: ' + JSON.stringify(confirmation, null, 2));
+    return 'Trip booked. Thank you! what would you like to do next?';
+  }
+
   render() {
     const { messages } = this.state;
 
     return (
       <SafeAreaView style={styles.safeContainer}>
         <HeaderBar heading="Chat" {...this.props} />
-        <GiftedChat
+        {/* <GiftedChat
           messages={messages}
           onSend={messages => this.onSend(messages)}
           renderActions={this.renderActions}
@@ -90,6 +99,13 @@ class Feedback extends React.Component {
           user={{
             _id: 1,
           }}
+        /> */}
+        <ChatBot
+          title="My Bot"
+          botName="ScheduleAppointment_devv"
+          welcomeMessage="Hi"
+          onComplete={this.handleComplete}
+          clearOnComplete={false}
         />
       </SafeAreaView>
     );
@@ -99,4 +115,4 @@ class Feedback extends React.Component {
 export default compose(
   withApollo,
   withNavigation,
-)(Feedback);
+)(Chat);
