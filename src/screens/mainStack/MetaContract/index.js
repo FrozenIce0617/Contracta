@@ -522,7 +522,7 @@ class MetaContract extends React.Component {
               {Object.keys(files).length !== 0 ? (
                 <View style={styles.contractContainer}>
                   {/*console.log('Analysing unprocessed via: ', files)*/}
-                  {files.items.map((unprocessedFile, index) => {
+                  {files.map((unprocessedFile, index) => {
                     if (unprocessedFile.filestate !== 0) return;
                     return (
                       <TouchableOpacity
@@ -568,16 +568,6 @@ class MetaContract extends React.Component {
 }
 
 const MetaContractWithData = compose(
-  graphql(MetaContractList, {
-    options: { fetchPolicy: 'network-only' /* pollInterval: 500 */ },
-    props: props => ({
-      contract:
-        props.data.listMetaContracts && props.data.listMetaContracts.items
-          ? props.data.listMetaContracts.items
-          : [],
-      loading: props.data.loading,
-    }),
-  }),
   graphql(ListFiles, {
     options: { fetchPolicy: 'network-only' },
     props: props => ({
@@ -595,9 +585,21 @@ const MetaContractWithData = compose(
         fetchPolicy: 'network-only',
       };
     },
-    props: props => ({
-      userInfo: props.data.getUser ? props.data.getUser : {},
-    }),
+    props: props => {
+      console.log('Props: ', props.data.getUser);
+      return {
+        userInfo: props.data.getUser ? props.data.getUser : {},
+        contract:
+          props.data.getUser.ownedmetacontracts &&
+          props.data.getUser.ownedmetacontracts.items
+            ? props.data.getUser.ownedmetacontracts.items
+            : [],
+        files:
+          props.data.getUser.files && props.data.getUser.files.items
+            ? props.data.getUser.files.items
+            : [],
+      };
+    },
   }),
 )(withApollo(MetaContract));
 
