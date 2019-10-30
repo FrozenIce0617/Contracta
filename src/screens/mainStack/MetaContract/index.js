@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  Linking
+  Linking,
 } from 'react-native';
 import { compose, graphql, withApollo, Mutation } from 'react-apollo';
 import { Auth, Analytics, Storage } from 'aws-amplify';
@@ -34,7 +34,6 @@ import styles from './styles';
 class MetaContract extends React.Component {
   constructor(props) {
     super(props);
-    
 
     this.state = {
       userId: '',
@@ -47,7 +46,8 @@ class MetaContract extends React.Component {
       files: [],
       curContract: null,
       curUnprocessed: null,
-      url:"https://s3.amazonaws.com/connectedai.co.uk/Contracta+-+Privacy+Policy.html"
+      url:
+        'https://s3.amazonaws.com/connectedai.co.uk/Contracta+-+Privacy+Policy.html',
     };
   }
 
@@ -305,14 +305,10 @@ class MetaContract extends React.Component {
                 <Text style={styles.termsContent}>
                   This document was last updated on September 9, 2019.
                 </Text>
-                
+
                 <TouchableOpacity onPress={this.handleClick}>
                   <Text style={styles.termsLink}>Privacy Policy</Text>
                 </TouchableOpacity>
-                {/*
-                <Text style={styles.termsLink}>Privacy Policy</Text>
-                <Text style={styles.termsLink}>Terms of Use</Text>
-                */}
                 <Divider style={styles.termsDivider} />
                 <View style={styles.termsRow}>
                   <Mutation
