@@ -188,6 +188,19 @@ export const GetUser = gql`
       timeline {
         id
       }
+      ownedmetacontracts {
+        items {
+          id
+          name
+          description
+          contracts {
+            items {
+              id
+              name
+            }
+          }
+        }
+      }
       files {
         items {
           id
