@@ -3,11 +3,11 @@ import { SafeAreaView } from 'react-native';
 import { compose, withApollo } from 'react-apollo';
 import { withNavigation } from 'react-navigation';
 import { ChatBot } from 'aws-amplify-react-native';
-import Amplify,{Interactions} from 'aws-amplify';
+import Amplify, { Interactions } from 'aws-amplify';
 
+import awsConfig from './../../../../aws-exports';
 import HeaderBar from '../../../components/HeaderBar';
 import styles from './styles';
-import awsConfig from './../../../../aws-exports';
 
 Amplify.configure({
   ...awsConfig,
@@ -19,11 +19,6 @@ Amplify.configure({
     },
   },
 });
-
-
-
-
-
 
 class Chat extends React.Component {
   handleComplete(err, confirmation) {
@@ -37,9 +32,9 @@ class Chat extends React.Component {
   }
 
   render() {
-    let userInput = "I want to Schedule an appointment";
-    const response =  Interactions.send("ScheduleAppointment_devv", userInput);
-    console.log (response.message);
+    let userInput = 'I want to Schedule an appointment';
+    const response = Interactions.send('ScheduleAppointment_devv', userInput);
+    console.log('ScheduleAppointment_devv: ', response.message);
 
     return (
       <SafeAreaView style={styles.safeContainer}>
